@@ -1,3 +1,6 @@
-const hello: string = 'Hello World!';
+import { AppServer } from './example/app.server';
 
-console.log(hello);
+(async () => {
+  const server = new AppServer('0.0.0.0', 3000);
+  await server.run();
+})()
