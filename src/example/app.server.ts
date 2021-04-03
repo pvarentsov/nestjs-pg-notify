@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 export class AppServer {
-
   constructor(
     private readonly host: string,
     private readonly port: number,
@@ -17,5 +16,4 @@ export class AppServer {
 
     Logger.log(`Server is running on: ${appURL}`, AppServer.name);
   }
-
 }
