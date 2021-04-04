@@ -1,15 +1,25 @@
-import { Controller } from '@nestjs/common';
-import { EventPattern, MessagePattern } from '@nestjs/microservices';
+import { Controller, Logger } from '@nestjs/common';
+import { Ctx, Payload } from '@nestjs/microservices';
+import { PgNotifyContext } from '../pg-notify/pg-notify.context';
+import { PgNotifyEventPattern, PgNotifyMessagePattern } from '../pg-notify/pg-notify.decorator';
 
 @Controller()
 export class AppController {
-  @EventPattern('greet')
-  public onEventPattern(): string {
+
+  @PgNotifyEventPattern('greet')
+  public onEventPattern(@Payload() payload: any, @Ctx() ctx: PgNotifyContext): string {
+    Logger.debug(`Payload: ${JSON.stringify(payload)}`, AppController.name);
+    Logger.debug(`Context: ${JSON.stringify(ctx)}`, AppController.name);
+
     return 'Hello!';
   }
 
-  @MessagePattern({event: 'greet'})
-  public onMessagePattern(): string {
+  @PgNotifyMessagePattern({event: 'greet', a: 'test'})
+  public onMessagePattern(@Payload() payload: any, @Ctx() ctx: PgNotifyContext): string {
+    Logger.debug(`Payload: ${JSON.stringify(payload)}`, AppController.name);
+    Logger.debug(`Context: ${JSON.stringify(ctx)}`, AppController.name);
+
     return 'Hello!';
   }
+
 }

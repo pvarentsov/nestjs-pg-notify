@@ -1,7 +1,11 @@
 import { Logger, LoggerService } from '@nestjs/common';
-import { CustomTransportStrategy, Server } from '@nestjs/microservices';
+import { CustomTransportStrategy, MessageHandler, Server } from '@nestjs/microservices';
 import createSubscriber, { Subscriber } from 'pg-listen';
-import { PgNotifyOptions } from './pg-notify.type';
+import { isObservable } from 'rxjs';
+import { PG_NOTIFY_TRANSPORT } from './pg-notify.constant';
+import { PgNotifyContext } from './pg-notify.context';
+import { PgNotifyOptions, PgNotifyPattern } from './pg-notify.type';
+import { isObject } from './pg-notify.util';
 
 export class PgNotifyServer extends Server implements CustomTransportStrategy {
   private readonly subscriber: Subscriber;
@@ -17,6 +21,9 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
   public async listen(callback: () => void): Promise<void> {
     try {
       await this.subscriber.connect();
+      await this.listenChannels();
+
+      this.bindMessageHandlers();
     }
     catch (error) {
       this.subscriber.events.emit('error', error);
@@ -36,6 +43,17 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     }
   }
 
+  public addHandler(pattern: Record<string, any>|string, callback: MessageHandler): void {
+    if (isObject(pattern) && pattern.transport === PG_NOTIFY_TRANSPORT) {
+      super.addHandler((pattern as PgNotifyPattern).pattern, callback, (pattern as PgNotifyPattern).isEvent);
+    }
+  }
+
+  private async listenChannels(): Promise<void> {
+    const channels = Array.from(this.messageHandlers.keys());
+    await Promise.all(channels.map(channel => this.subscriber.listenTo(channel)));
+  }
+
   private subscribe(options: PgNotifyOptions): Subscriber {
     const subscriber = createSubscriber(options.connection, {
       retryInterval: options.strategy?.retryInterval,
@@ -46,6 +64,23 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     this.bindEventHandlers(subscriber);
 
     return subscriber;
+  }
+
+  private bindMessageHandlers(): void {
+    this.subscriber.events.on('notification', async (notification) => {
+      const handler = this.getHandlerByPattern(notification.channel);
+
+      if (handler) {
+        const data = notification.payload;
+        const ctx = new PgNotifyContext(notification.processId, notification.channel, data);
+
+        const result = await handler(data, ctx);
+
+        if (isObservable(result)) {
+          result.subscribe();
+        }
+      }
+    });
   }
 
   private bindEventHandlers(subscriber: Subscriber): void {
@@ -60,8 +95,8 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
       this.loggerService.error(message, error.stack, PgNotifyServer.name);
     });
 
-    subscriber.events.on('reconnect', () => {
-      this.loggerService.error('Connection refused', undefined, PgNotifyServer.name);
+    subscriber.events.on('reconnect', attempt => {
+      this.loggerService.error(`Connection refused. Retry attempt ${attempt}...`, undefined, PgNotifyServer.name);
     });
   }
 

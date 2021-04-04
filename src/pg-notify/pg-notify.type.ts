@@ -24,3 +24,9 @@ export type PgNotifyConnectionStrategy = {
    */
   retryTimeout?: number;
 };
+
+export type PgNotifyPattern<TPattern = string> = {
+  transport: string,
+  isEvent: boolean,
+  pattern: TPattern
+};
