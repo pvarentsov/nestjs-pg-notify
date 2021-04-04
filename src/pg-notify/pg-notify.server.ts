@@ -1,20 +1,22 @@
 import { Logger, LoggerService } from '@nestjs/common';
-import { CustomTransportStrategy } from '@nestjs/microservices';
-import { PgNotifyOptions } from './pg-notify.type';
+import { CustomTransportStrategy, Server } from '@nestjs/microservices';
 import createSubscriber, { Subscriber } from 'pg-listen';
+import { PgNotifyOptions } from './pg-notify.type';
 
-export class PgNotifyServer implements CustomTransportStrategy {
+export class PgNotifyServer extends Server implements CustomTransportStrategy {
   private readonly subscriber: Subscriber;
-  private readonly logger: LoggerService;
+  private readonly loggerService: LoggerService;
 
   constructor(options: PgNotifyOptions) {
-    this.logger = options.logger || new Logger();
+    super();
+
+    this.loggerService = options.logger || new Logger();
     this.subscriber = this.subscribe(options);
   }
 
   public async listen(callback: () => void): Promise<void> {
     try {
-      // TODO: Bind message handlers
+      await this.subscriber.connect();
     }
     catch (error) {
       this.subscriber.events.emit('error', error);
@@ -48,18 +50,18 @@ export class PgNotifyServer implements CustomTransportStrategy {
 
   private bindEventHandlers(subscriber: Subscriber): void {
     subscriber.events.on('connected', () => {
-      this.logger.log('Connection established', PgNotifyServer.name);
+      this.loggerService.log('Connection established', PgNotifyServer.name);
     });
 
     subscriber.events.on('error', error => {
       const defaultMessage = 'Internal error';
       const message = error.message || defaultMessage;
 
-      this.logger.error(message, error.stack, PgNotifyServer.name);
+      this.loggerService.error(message, error.stack, PgNotifyServer.name);
     });
 
     subscriber.events.on('reconnect', () => {
-      this.logger.error('Connection refused', undefined, PgNotifyServer.name);
+      this.loggerService.error('Connection refused', undefined, PgNotifyServer.name);
     });
   }
 

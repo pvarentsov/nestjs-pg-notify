@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  postgres:
+    container_name: pgnotify_database
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: 'pgnotify'
+      POSTGRES_PASSWORD: 'pgnotify'
+      POSTGRES_DB: 'pgnotify'
+    ports:
+      - '5432:5432'
+    networks:
+      - pgnotify_network
+    restart: always
+
+networks:
+  pgnotify_network:
+    driver: bridge
