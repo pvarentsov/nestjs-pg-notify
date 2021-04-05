@@ -8,7 +8,6 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "build:release": "tsc -p tsconfig.release.json",
-    "start": "nest start --path tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
