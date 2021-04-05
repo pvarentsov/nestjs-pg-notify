@@ -6,10 +6,10 @@ NestJS custom transport strategy for PostgreSQL PubSub.
 
 **Version 1.0.0**
 
-  - [ ] Detailed README
-  - [ ] Usage examples
-  - [ ] Tests & coverage
-  - [ ] GitHub actions
+  * **🗷** Detailed README
+  * **🗷** Usage examples
+  * **🗷** Tests & coverage
+  * **🗷** GitHub actions
 
 ## License
 
