@@ -1,7 +1,6 @@
 import { Logger, LoggerService } from '@nestjs/common';
-import { CustomTransportStrategy, MessageHandler, Server, WritePacket } from '@nestjs/microservices';
+import { CustomTransportStrategy, MessageHandler, Server } from '@nestjs/microservices';
 import { NO_EVENT_HANDLER, NO_MESSAGE_HANDLER } from '@nestjs/microservices/constants';
-import { PacketId } from '@nestjs/microservices/interfaces/packet.interface';
 import createSubscriber, { Subscriber } from 'pg-listen';
 import { PG_NOTIFY_TRANSPORT } from './pg-notify.constant';
 import { PgNotifyContext } from './pg-notify.context';
@@ -16,7 +15,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     super();
 
     this.loggerService = options.logger || new Logger();
-    this.subscriber = this.subscribe(options);
+    this.subscriber = this.createClient(options);
   }
 
   public async listen(callback: () => void): Promise<void> {
@@ -50,12 +49,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     }
   }
 
-  private async listenChannels(): Promise<void> {
-    const channels = Array.from(this.messageHandlers.keys());
-    await Promise.all(channels.map(channel => this.subscriber.listenTo(channel)));
-  }
-
-  private subscribe(options: PgNotifyOptions): Subscriber {
+  private createClient(options: PgNotifyOptions): Subscriber {
     const subscriber = createSubscriber(options.connection, {
       retryInterval: options.strategy?.retryInterval,
       retryLimit: options.strategy?.retryLimit,
@@ -65,6 +59,11 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     this.bindEventHandlers(subscriber);
 
     return subscriber;
+  }
+
+  private async listenChannels(): Promise<void> {
+    const channels = Array.from(this.messageHandlers.keys());
+    await Promise.all(channels.map(channel => this.subscriber.listenTo(channel)));
   }
 
   private bindMessageHandlers(): void {
@@ -78,42 +77,6 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
 
       return this.handleAsEvent(notification.channel, payload.data, ctx);
     });
-  }
-
-  private async handleAsEvent(channel: string, data: any, ctx: PgNotifyContext): Promise<void> {
-    const handler = this.getHandlerByPattern(channel);
-
-    if (!handler) {
-      return this.loggerService.error(`${NO_EVENT_HANDLER} Event pattern: ${channel}.`);
-    }
-    else {
-      const response$ = this.transformToObservable(
-        await handler(data, ctx),
-      );
-
-      response$.subscribe();
-    }
-  }
-
-  private async handlerAsRequest(channel: string, id: string, data: any, ctx: PgNotifyContext): Promise<void> {
-    const handler = this.getHandlerByPattern(channel);
-    const publish = this.getPublisher(channel, id);
-
-    if (!handler) {
-      const noHandlerPacket: WritePacket & PacketId = {
-        id: id,
-        status: 'error',
-        err: NO_MESSAGE_HANDLER,
-      };
-
-      return publish(noHandlerPacket);
-    }
-
-    const response$ = this.transformToObservable(
-      await handler(data, ctx),
-    );
-
-    response$ && this.send(response$, publish);
   }
 
   private bindEventHandlers(subscriber: Subscriber): void {
@@ -133,6 +96,37 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     });
   }
 
+  private async handleAsEvent(channel: string, data: any, ctx: PgNotifyContext): Promise<void> {
+    const handler = this.getHandlerByPattern(channel);
+
+    if (!handler) {
+      return this.loggerService.error(`${NO_EVENT_HANDLER} Event pattern: ${channel}.`);
+    }
+
+    const resolvedHandler = await handler(data, ctx);
+    const response$ = this.transformToObservable(resolvedHandler);
+
+    response$.subscribe();
+  }
+
+  private async handlerAsRequest(channel: string, id: string, data: any, ctx: PgNotifyContext): Promise<void> {
+    const handler = this.getHandlerByPattern(channel);
+    const publish = this.getPublisher(channel, id);
+
+    if (!handler) {
+      return publish({
+        id: id,
+        status: 'error',
+        err: NO_MESSAGE_HANDLER,
+      });
+    }
+
+    const resolvedHandler = await handler(data, ctx);
+    const response$ = this.transformToObservable(resolvedHandler);
+
+    this.send(response$, publish);
+  }
+
   private getPublisher(pattern: string, id: string): (response: any) => Promise<any> {
     return async (response: any): Promise<void> => {
       Object.assign(response, { id });
@@ -141,10 +135,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
   }
 
   private parsePayload(payload: any): {id?: string, data: any} {
-    const parsedPayload = {
-      id: undefined,
-      data: undefined,
-    };
+    const parsedPayload = {id: undefined, data: undefined};
 
     try {
       const payloadAsObject = JSON.parse(payload);

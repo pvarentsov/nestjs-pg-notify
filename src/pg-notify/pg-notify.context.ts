@@ -2,9 +2,9 @@ export class PgNotifyContext {
   private readonly processId: number;
   private readonly channel: string|Record<string, any>;
   private readonly data?: any;
-  private readonly requestId?: any;
+  private readonly requestId?: string;
 
-  constructor(processId: number, channel: string, data?: any, requestId?: any) {
+  constructor(processId: number, channel: string, data?: any, requestId?: string) {
     this.processId = processId;
     this.data = data;
     this.requestId = requestId;
@@ -29,7 +29,7 @@ export class PgNotifyContext {
     return this.data;
   }
 
-  public getRequestId(): any|undefined {
+  public getRequestId(): string|undefined {
     return this.requestId;
   }
 }

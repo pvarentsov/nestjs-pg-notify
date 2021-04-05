@@ -1,6 +1,6 @@
 import { Logger, LoggerService, OnApplicationBootstrap } from '@nestjs/common';
 import { ClientProxy, ReadPacket, WritePacket } from '@nestjs/microservices';
-import createSubscriber, { PgParsedNotification, Subscriber } from 'pg-listen';
+import createSubscriber, { PgParsedNotification, Subscriber as Publisher } from 'pg-listen';
 import { PgNotifyOptions } from './pg-notify.type';
 import { getReplyPattern } from './pg-notify.util';
 
@@ -16,7 +16,6 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
 
     this.loggerService = options.logger || new Logger();
     this.publisher = this.createClient(options);
-
     this.connected = false;
   }
 
@@ -25,14 +24,11 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
   }
 
   public async connect(): Promise<void> {
-    if (this.connected) {
-      return;
-    }
+    if (this.connected) return;
 
     try {
       await this.publisher.connect();
-
-      this.publisher.events.on('notification', this.createResponseCallback());
+      this.bindMessageHandlers();
     }
     catch (error) {
       this.publisher.events.emit('error', error);
@@ -103,20 +99,24 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
     return client;
   }
 
-  private bindEventHandlers(subscriber: Subscriber): void {
-    subscriber.events.on('connected', () => {
+  private bindMessageHandlers(): void {
+    this.publisher.events.on('notification', this.createResponseCallback());
+  }
+
+  private bindEventHandlers(publisher: Publisher): void {
+    publisher.events.on('connected', () => {
       this.connected = true;
       this.loggerService.log('Connection established', PgNotifyClient.name);
     });
 
-    subscriber.events.on('error', error => {
+    publisher.events.on('error', error => {
       const defaultMessage = 'Internal error';
       const message = error.message || defaultMessage;
 
       this.loggerService.error(message, error.stack, PgNotifyClient.name);
     });
 
-    subscriber.events.on('reconnect', attempt => {
+    publisher.events.on('reconnect', attempt => {
       this.connected = false;
       this.loggerService.error(`Connection refused. Retry attempt ${attempt}...`, undefined, PgNotifyClient.name);
     });
@@ -129,9 +129,7 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
 
       const callback = this.routingMap.get(id);
 
-      if (!callback) {
-        return;
-      }
+      if (!callback) return;
 
       if (isDisposed || err) {
         return callback({err, response, isDisposed: true});
@@ -146,7 +144,6 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
 
     if (subscriptionCount) {
       this.subscriptionsCount.set(channel, subscriptionCount - 1);
-
       if (subscriptionCount - 1 <= 0) {
         this.publisher.unlisten(channel);
       }
@@ -154,5 +151,3 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
   }
 
 }
-
-type Publisher = Subscriber;
