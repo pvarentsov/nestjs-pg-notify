@@ -103,10 +103,9 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
       return this.loggerService.error(`${NO_EVENT_HANDLER} Event pattern: ${channel}.`);
     }
 
-    const resolvedHandler = await handler(data, ctx);
-    const response$ = this.transformToObservable(resolvedHandler);
-
-    response$.subscribe();
+    this
+      .transformToObservable(handler(data, ctx))
+      .subscribe();
   }
 
   private async handlerAsRequest(channel: string, id: string, data: any, ctx: PgNotifyContext): Promise<void> {
