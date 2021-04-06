@@ -18,12 +18,11 @@
     "incremental": true,
     "types": [
       "reflect-metadata",
-      "jest",
       "node"
     ],
     "lib": [
       "ES2017"
     ]
   },
-  "include": ["./src", "./test"]
+  "include": ["./src"]
 }
