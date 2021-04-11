@@ -24,17 +24,12 @@ export class LoggingInterceptor implements NestInterceptor {
   }
 
   private logHttp(request: Request, next: CallHandler): Observable<void> {
-    const requestStartDate: number = Date.now();
-
     return next.handle().pipe(
       tap((): void => {
-        const requestFinishDate: number = Date.now();
-
         const message: string =
           '[Http] ' +
           `Method: ${request.method}; ` +
-          `Path: ${request.path}; ` +
-          `SpentTime: ${requestFinishDate - requestStartDate}ms`;
+          `Path: ${request.path};`;
 
         Logger.log(message, LoggingInterceptor.name);
       })
@@ -42,22 +37,21 @@ export class LoggingInterceptor implements NestInterceptor {
   }
 
   private logPgNotify(context: PgNotifyContext, next: CallHandler): Observable<void> {
-    const requestStartDate: number = Date.now();
-
     return next.handle().pipe(
       tap((): void => {
-        const requestFinishDate: number = Date.now();
-
         const channel = context.getChannel();
         const data = context.getData();
+        const requestId = context.getRequestId();
 
-        const message: string =
+        let message: string =
           '[PgNotify] ' +
-          `RequestId: ${context.getRequestId()}; ` +
           `Channel: ${typeof channel === 'string' ? channel : JSON.stringify(channel)}; ` +
           `ProcessId: ${context.getProcessId()}; ` +
-          `Data: ${typeof data === 'string' ? data : JSON.stringify(data)}; ` +
-          `SpentTime: ${requestFinishDate - requestStartDate}ms`;
+          `Data: ${typeof data === 'string' ? data : JSON.stringify(data)};`;
+
+        if (requestId) {
+          message += ` RequestId: ${requestId};`;
+        }
 
         Logger.log(message, LoggingInterceptor.name);
       })
