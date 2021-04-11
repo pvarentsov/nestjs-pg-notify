@@ -2,10 +2,13 @@ import { Logger, LoggerService } from '@nestjs/common';
 import { CustomTransportStrategy, MessageHandler, Server } from '@nestjs/microservices';
 import { NO_EVENT_HANDLER, NO_MESSAGE_HANDLER } from '@nestjs/microservices/constants';
 import createSubscriber, { Subscriber } from 'pg-listen';
+import { of, Subscription } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { PG_NOTIFY_TRANSPORT } from './pg-notify.constant';
 import { PgNotifyContext } from './pg-notify.context';
+import { PgNotifyResponse } from './pg-notify.response';
 import { PgNotifyOptions, PgNotifyPattern } from './pg-notify.type';
-import { getReplyPattern, isObject } from './pg-notify.util';
+import { getReplyPattern, isObject, parseErrorMessage } from './pg-notify.util';
 
 export class PgNotifyServer extends Server implements CustomTransportStrategy {
   private readonly subscriber: Subscriber;
@@ -86,7 +89,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
 
     subscriber.events.on('error', error => {
       const defaultMessage = 'Internal error';
-      const message = error.message || defaultMessage;
+      const message = parseErrorMessage(error) || defaultMessage;
 
       this.loggerService.error(message, error.stack, PgNotifyServer.name);
     });
@@ -100,30 +103,40 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     const handler = this.getHandlerByPattern(channel);
 
     if (!handler) {
-      return this.loggerService.error(`${NO_EVENT_HANDLER} Event pattern: ${channel}.`);
+      return this.loggerService.error(`${NO_EVENT_HANDLER} Event pattern: ${channel}.`, undefined, PgNotifyServer.name);
     }
 
-    this
-      .transformToObservable(handler(data, ctx))
-      .subscribe();
+    try {
+      const resolvedHandler = await handler(data, ctx);
+      this.transformToObservable(resolvedHandler).subscribe();
+    }
+    catch (error) {
+      return this.loggerService.error(parseErrorMessage(error), undefined, PgNotifyServer.name);
+    }
   }
 
-  private async handlerAsRequest(channel: string, id: string, data: any, ctx: PgNotifyContext): Promise<void> {
+  private async handlerAsRequest(channel: string, id: string, data: any, ctx: PgNotifyContext): Promise<Subscription> {
     const handler = this.getHandlerByPattern(channel);
     const publish = this.getPublisher(channel, id);
 
     if (!handler) {
-      return publish({
-        id: id,
-        status: 'error',
-        err: NO_MESSAGE_HANDLER,
-      });
+      const response$ = of(PgNotifyResponse.error(NO_MESSAGE_HANDLER, 404));
+      return this.send(response$, publish);
     }
 
-    const resolvedHandler = await handler(data, ctx);
-    const response$ = this.transformToObservable(resolvedHandler);
+    try {
+      const resolvedHandler = await handler(data, ctx);
+      const response$ = this.transformToObservable(resolvedHandler).pipe(
+        map(res => this.parseResponse(res)),
+        catchError(err => of(PgNotifyResponse.error(this.parseResponseError(err))))
+      );
 
-    this.send(response$, publish);
+      return this.send(response$, publish);
+    }
+    catch (error) {
+      const response$ = of(PgNotifyResponse.error(this.parseResponseError(error)));
+      return this.send(response$, publish);
+    }
   }
 
   private getPublisher(pattern: string, id: string): (response: any) => Promise<any> {
@@ -151,6 +164,19 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     }
 
     return parsedPayload;
+  }
+
+  private parseResponseError(error: unknown): string|unknown {
+    return error instanceof Error
+      ? error.message
+      : error;
+  }
+
+  private parseResponse(data: unknown): PgNotifyResponse {
+    if (data instanceof PgNotifyResponse) {
+      return data;
+    }
+    return PgNotifyResponse.success(data);
   }
 
 }
