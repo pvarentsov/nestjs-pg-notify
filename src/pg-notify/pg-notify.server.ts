@@ -28,8 +28,8 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
 
       this.bindMessageHandlers();
     }
-    catch (error) {
-      this.subscriber.events.emit('error', error);
+    catch (err) {
+      this.subscriber.events.emit('error', err);
     }
     finally {
       callback();
@@ -41,8 +41,8 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
       await this.subscriber.unlistenAll();
       await this.subscriber.close();
     }
-    catch (error) {
-      this.subscriber.events.emit('error', error);
+    catch (err) {
+      this.subscriber.events.emit('error', err);
     }
   }
 
@@ -87,11 +87,11 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
       this.loggerService.log('Connection established', PgNotifyServer.name);
     });
 
-    subscriber.events.on('error', error => {
+    subscriber.events.on('error', err => {
       const defaultMessage = 'Internal error';
-      const message = parseErrorMessage(error) || defaultMessage;
+      const message = parseErrorMessage(err) || defaultMessage;
 
-      this.loggerService.error(message, error.stack, PgNotifyServer.name);
+      this.loggerService.error(message, err.stack, PgNotifyServer.name);
     });
 
     subscriber.events.on('reconnect', attempt => {
@@ -110,8 +110,8 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
       const resolvedHandler = await handler(data, ctx);
       this.transformToObservable(resolvedHandler).subscribe();
     }
-    catch (error) {
-      return this.loggerService.error(parseErrorMessage(error), undefined, PgNotifyServer.name);
+    catch (err) {
+      return this.loggerService.error(parseErrorMessage(err), undefined, PgNotifyServer.name);
     }
   }
 
@@ -127,14 +127,14 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     try {
       const resolvedHandler = await handler(data, ctx);
       const response$ = this.transformToObservable(resolvedHandler).pipe(
-        map(res => this.parseResponse(res)),
-        catchError(err => of(PgNotifyResponse.error(this.parseResponseError(err))))
+        map(res => this.getResponse(res)),
+        catchError(err => of(PgNotifyResponse.error(parseErrorMessage(err))))
       );
 
       return this.send(response$, publish);
     }
-    catch (error) {
-      const response$ = of(PgNotifyResponse.error(this.parseResponseError(error)));
+    catch (err) {
+      const response$ = of(PgNotifyResponse.error(parseErrorMessage(err)));
       return this.send(response$, publish);
     }
   }
@@ -159,20 +159,14 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
       else {
         parsedPayload.data = payloadAsObject;
       }
-    } catch (error) {
+    } catch (err) {
       parsedPayload.data = payload;
     }
 
     return parsedPayload;
   }
 
-  private parseResponseError(error: unknown): string|unknown {
-    return error instanceof Error
-      ? error.message
-      : error;
-  }
-
-  private parseResponse(data: unknown): PgNotifyResponse {
+  private getResponse(data: unknown): PgNotifyResponse {
     if (data instanceof PgNotifyResponse) {
       return data;
     }
