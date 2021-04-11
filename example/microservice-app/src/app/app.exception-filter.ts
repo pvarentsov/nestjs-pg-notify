@@ -6,11 +6,7 @@ import { Observable, of } from 'rxjs';
 export class ExceptionFilter implements ExceptionFilter {
 
   catch(error: Error & {response?: any}, host: ArgumentsHost): Observable<any> {
-    const context = host.switchToRpc().getContext();
-
-    if (context instanceof PgNotifyContext) {
-      Logger.error(error.message, error.stack, 'PgNotifyExceptionFilter');
-    }
+    const context = host.switchToRpc().getContext<PgNotifyContext>();
 
     let status = 500;
     let err = error.message;
@@ -19,6 +15,8 @@ export class ExceptionFilter implements ExceptionFilter {
       status = error.response.statusCode || status;
       err = error.response.message || err;
     }
+
+    Logger.error(error.message, error.stack, 'PgNotifyExceptionFilter');
 
     return of({status, err});
   }

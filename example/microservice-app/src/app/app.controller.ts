@@ -1,10 +1,14 @@
-import { Controller, Logger, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, UseFilters, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Ctx, Payload } from '@nestjs/microservices';
 import { PgNotifyContext, PgNotifyEventPattern, PgNotifyMessagePattern } from 'nestjs-pg-notify';
+import { ExceptionFilter } from './app.exception-filter';
+import { LoggingInterceptor } from './app.logging.interceptor';
 import { AppUserCreatedDto } from './dto/app.user-created.dto';
 import { AppUserRemovedDto } from './dto/app.user-removed.dto';
 
 @Controller()
+@UseFilters(ExceptionFilter)
+@UseInterceptors(LoggingInterceptor)
 export class AppController {
 
   @PgNotifyEventPattern('user:created')
@@ -15,14 +19,6 @@ export class AppController {
 
   ): string
   {
-    const serializedPayload = JSON.stringify(payload);
-    const serializedContext = JSON.stringify(context);
-
-    Logger.debug(
-      `User created! Payload: ${serializedPayload}; Context: ${serializedContext}`,
-      AppController.name,
-    );
-
     return 'UserCreated: Ok';
   }
 
@@ -34,14 +30,6 @@ export class AppController {
 
   ): string
   {
-    const serializedPayload = JSON.stringify(payload);
-    const serializedContext = JSON.stringify(context);
-
-    Logger.debug(
-      `User removed! Payload: ${serializedPayload}; Context: ${serializedContext}`,
-      AppController.name,
-    );
-
     return 'UserRemoved: Ok';
   }
 
