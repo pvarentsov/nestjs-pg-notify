@@ -75,7 +75,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
       const ctx = new PgNotifyContext(notification.processId, notification.channel, payload.data, payload.id);
 
       if (payload.id) {
-        return this.handlerAsRequest(notification.channel, payload.id, payload.data, ctx);
+        return this.handleAsRequest(notification.channel, payload.id, payload.data, ctx);
       }
 
       return this.handleAsEvent(notification.channel, payload.data, ctx);
@@ -115,7 +115,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     }
   }
 
-  private async handlerAsRequest(channel: string, id: string, data: any, ctx: PgNotifyContext): Promise<Subscription> {
+  private async handleAsRequest(channel: string, id: string, data: any, ctx: PgNotifyContext): Promise<Subscription> {
     const handler = this.getHandlerByPattern(channel);
     const publish = this.getPublisher(channel, id);
 
