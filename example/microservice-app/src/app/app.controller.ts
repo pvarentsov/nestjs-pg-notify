@@ -1,7 +1,7 @@
 import { Controller, UseFilters, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Ctx, Payload } from '@nestjs/microservices';
 import { PgNotifyContext, PgNotifyEventPattern, PgNotifyMessagePattern } from 'nestjs-pg-notify';
-import { ExceptionFilter } from './app.exception-filter';
+import { ExceptionFilter } from './app.exception.filter';
 import { LoggingInterceptor } from './app.logging.interceptor';
 import { AppUserCreatedDto } from './dto/app.user-created.dto';
 import { AppUserRemovedDto } from './dto/app.user-removed.dto';
