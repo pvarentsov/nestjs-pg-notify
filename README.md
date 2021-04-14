@@ -15,9 +15,8 @@ with the PostgreSQL asynchronous notification model.
 
 ## Custom transporter
 
-**NestJS PG Notify** implements publish/subscribe messaging paradigm using PostgreSQL as a transporter. 
+**NestJS PG Notify** implements Pub/Sub messaging paradigm using PostgreSQL as a [NestJS custom transporter](https://docs.nestjs.com/microservices/custom-transport). 
 Under the hood it wraps [pg-listen](https://github.com/andywer/pg-listen) library.
-
 
 It can be used in [microservice](https://docs.nestjs.com/microservices/basics) and [hybrid](https://docs.nestjs.com/faq/hybrid-application) 
 NestJS applications. The [example](./example) folder contains examples for both types of applications.
