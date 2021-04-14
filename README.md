@@ -11,7 +11,7 @@ PostgreSQL can be used as Pub/Sub message broker.
 The functionality is similar to the Redis Pub/Sub, but has its own features and limitations.
 
 The [References](#References) section contains links that may be useful to familiarize 
-with the PostgreSQL asynchronous notification model.
+with the PostgreSQL asynchronous notifications.
 
 ### Custom transporter
 
