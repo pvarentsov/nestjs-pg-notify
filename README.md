@@ -37,5 +37,15 @@ $ npm i nestjs-pg-notify
 
 ### References
 
-1. [PostgreSQL Documentation: Asynchronous Notification](https://www.postgresql.org/docs/9.1/libpq-notify.html)
-2. [PgBouncer does not support NOTIFY/LISTEN commands in transaction pool mode](https://www.pgbouncer.org/features.html)
+1. PostgreSQL Documentation:
+   * [Asynchronous Notification](https://www.postgresql.org/docs/9.6/libpq-notify.html)
+   * [NOTIFY](https://www.postgresql.org/docs/9.6/sql-notify.html)
+   * [LISTEN](https://www.postgresql.org/docs/9.6/sql-listen.html) 
+2. PgBouncer Documentation:
+   * [Transaction pool mode does not support NOTIFY/LISTEN features](https://www.pgbouncer.org/features.html)
+3. NestJS Documentation:
+   * [Microservices](https://docs.nestjs.com/microservices/basics)
+   * [Hybrid applications](https://docs.nestjs.com/faq/hybrid-application)
+   * [Custom transporters](https://docs.nestjs.com/microservices/custom-transport)
+4. Dependencies:
+   * [pg-listen](https://github.com/andywer/pg-listen)
