@@ -27,6 +27,100 @@ NestJS applications. The [example](./example) folder contains examples for both 
 $ npm i nestjs-pg-notify
 ```
 
+### Usage
+
+1. Setup PgNotifyServer as custom strategy
+
+   ```typescript
+   import { PgNotifyServer } from 'nestjs-pg-notify';
+   
+   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+     strategy: new PgNotifyServer({
+       /**
+        * - Required parameter
+        * - Corresponds to the "pg" library's config
+        */  
+       connection: {
+         host: 'localhost',
+         port: 5432,
+         database: 'pgnotify',
+         user: 'pgnotify',
+         password: 'pgnotify',
+       },
+       /**
+        * - Optional parameter
+        * - Contains retry-strategy config passing to the "pg-listen" library
+        */
+       strategy: {
+         retryInterval: 1_000,
+         retryTimeout: Number.POSITIVE_INFINITY,
+       },
+       /**
+        * - Optional parameter
+        * - Overriding of the logger with own implementation
+        */
+       logger: new Logger(),
+     })
+   });
+   ```
+
+2. Setup PgNotifyClient as client proxy
+
+   ```typescript
+   import { PgNotifyClient } from 'nestjs-pg-notify';
+   
+   @Module({
+     providers: [
+       {
+         provide: 'PG_NOTIFY_CLIENT',
+         useFactory: (): ClientProxy => new PgNotifyClient({
+           connection: {
+             host: 'localhost',
+             port: 5432,
+             database: 'pgnotify',
+             user: 'pgnotify',
+             password: 'pgnotify',
+           },
+           strategy: {
+             retryInterval: 1_000,
+             retryTimeout: Number.POSITIVE_INFINITY,
+           }, 
+         })
+       },
+     ],
+     exports: [
+       'PG_NOTIFY_CLIENT',
+     ]
+   })
+   export class AppModule {}
+   ```
+
+   Client proxy can be used as a provider. The configuration is the same as the configuration of `PgNotifyServer`.
+
+   ```typescript
+   import { PgNotifyResponse } from 'nestjs-pg-notify';
+   
+   export class AppService {
+     constructor(
+       @Inject('PG_NOTIFY_CLIENT')
+       private readonly client: ClientProxy,
+     ) {}
+   
+     // Sends request and expects response
+     sendRequest(): Observable<PgNotifyResponse> {
+       return this.client.send('greeting', {message: 'Hello!'}).pipe(
+         timeout(2_000),
+         tap(response => console.log(response))      
+       );
+     }
+   
+     // Emits event
+     emitEvent(): Observable<void> {
+       return this.client.emit({event: 'greeting'}, {message: 'Hello!'});
+     }
+   }
+   ```
+
 ### Roadmap
 
 **Version 1.0.0**
