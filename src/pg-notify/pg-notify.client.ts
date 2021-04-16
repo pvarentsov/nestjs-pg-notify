@@ -1,8 +1,9 @@
 import { Logger, LoggerService, OnApplicationBootstrap } from '@nestjs/common';
 import { ClientProxy, ReadPacket, WritePacket } from '@nestjs/microservices';
 import createSubscriber, { PgParsedNotification, Subscriber as Publisher } from 'pg-listen';
+import { PgNotifyResponse } from './pg-notify.response';
 import { PgNotifyOptions } from './pg-notify.type';
-import { getReplyPattern } from './pg-notify.util';
+import { getReplyPattern, isObject } from './pg-notify.util';
 
 export class PgNotifyClient extends ClientProxy implements OnApplicationBootstrap {
   private readonly publisher: Publisher;
@@ -127,15 +128,16 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
       const packet = JSON.parse(notification.payload);
       const { err, response, isDisposed, id } = packet;
 
+      const parseResponse = this.getResponse(response);
       const callback = this.routingMap.get(id);
 
       if (!callback) return;
 
       if (isDisposed || err) {
-        return callback({err, response, isDisposed: true});
+        return callback({err, parseResponse, isDisposed: true});
       }
 
-      return callback({err, response});
+      return callback({err, parseResponse});
     };
   }
 
@@ -148,6 +150,14 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
         this.publisher.unlisten(channel);
       }
     }
+  }
+
+  private getResponse(response: any): any {
+    if (isObject(response) && response.status) {
+      return new PgNotifyResponse(response.status, response.data, response.error);
+    }
+
+    return response;
   }
 
 }

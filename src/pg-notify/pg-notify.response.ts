@@ -2,7 +2,7 @@ export class PgNotifyResponse {
   constructor(
     public readonly status: number|string,
     public readonly data?: any,
-    public readonly error?: string
+    public readonly error?: any
   ) {}
 
   public static success(data: any, status: number|string = 200): PgNotifyResponse {
