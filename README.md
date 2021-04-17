@@ -187,7 +187,7 @@ export class ExceptionFilter implements ExceptionFilter {
 }
 ```
 
-Then we can register filter using standard `@UseFilters()` decorator. It supports method-scope and controller-scope filters.
+Then we can register filter using standard `@UseFilters()` decorator. It supports method-scope and controller-scope modes.
 
 ```typescript
 @Controller()
@@ -210,13 +210,13 @@ export class LoggingInterceptor implements NestInterceptor {
       .getContext<PgNotifyContext>();
 
     return next.handle().pipe(
-      tap((): void => Logger.log(JSON.stringify(context), LoggingInterceptor.name)),
+      tap((): void => Logger.log(JSON.stringify(pgNotifyContext), LoggingInterceptor.name)),
     );
   }
 }
 ```
 
-To register interceptor we can use `@UseInterceptors()` decorator. It also supports method-scope and controller-scope interceptors.
+To register interceptor we can use `@UseInterceptors()` decorator. It also supports method-scope and controller-scope modes.
 
 ```typescript
 @Controller()
