@@ -128,16 +128,16 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
       const packet = JSON.parse(notification.payload);
       const { err, response, isDisposed, id } = packet;
 
-      const parseResponse = this.getResponse(response);
+      const parsedResponse = this.getResponse(response);
       const callback = this.routingMap.get(id);
 
       if (!callback) return;
 
       if (isDisposed || err) {
-        return callback({err, parseResponse, isDisposed: true});
+        return callback({err, response: parsedResponse, isDisposed: true});
       }
 
-      return callback({err, parseResponse});
+      return callback({err, response: parsedResponse});
     };
   }
 
@@ -152,7 +152,7 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
     }
   }
 
-  private getResponse(response: any): any {
+  private getResponse(response: unknown): PgNotifyResponse|unknown {
     if (isObject(response) && response.status) {
       return new PgNotifyResponse(response.status, response.data, response.error);
     }
