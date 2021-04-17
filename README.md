@@ -29,7 +29,7 @@ $ npm i nestjs-pg-notify
 
 ## Usage
 
-#### Setup `PgNotifyServer` as custom strategy.
+### Setup `PgNotifyServer` as custom strategy
 
 ```typescript
 import { PgNotifyServer } from 'nestjs-pg-notify';
@@ -64,7 +64,7 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
 });
 ```
 
-#### Bind message handlers.
+### Bind message handlers
 
 `NestJS PG Notify` offers two decorators to register messages handlers: `@PgNotifyEventPattern()` and `@PgNotifyMessagePattern()`.
 These one are an alternative to standard decorators `@EventPattern()` and `@MessagePattern()`.
@@ -95,7 +95,7 @@ export class AppController {
 
 Standard decorator `@Ctx()` allows access to the context of the incoming request. In our case context object is an instance of `PgNotifyContext`. 
 
-#### Setup `PgNotifyClient` as client proxy.
+### Setup `PgNotifyClient` as client proxy
 
 Client proxy can be registered as a custom provider. The configuration is the same as the configuration of `PgNotifyServer`.
 
@@ -158,7 +158,7 @@ export class AppService {
 }
 ```
 
-#### Exception filters
+### Exception filters
 
 Client proxy generates request identifier when we send requests using `client.send()`.
 Request identifier in the context of the incoming request is the criterion for preparing an error response for the client. 
