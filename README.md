@@ -15,7 +15,7 @@ with the PostgreSQL asynchronous notifications.
 
 ## Custom transporter
 
-**NestJS PG Notify** implements Pub/Sub messaging paradigm using PostgreSQL as a [NestJS custom transporter](https://docs.nestjs.com/microservices/custom-transport). 
+`NestJS PG Notify` implements Pub/Sub messaging paradigm using PostgreSQL as a [NestJS custom transporter](https://docs.nestjs.com/microservices/custom-transport). 
 Under the hood it wraps [pg-listen](https://github.com/andywer/pg-listen) library.
 
 It can be used in [microservice](https://docs.nestjs.com/microservices/basics) and [hybrid](https://docs.nestjs.com/faq/hybrid-application) 
@@ -63,6 +63,35 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
   })
 });
 ```
+
+#### Bind message handlers.
+
+`NestJS PG Notify` offers two decorators to register messages handlers: `@PgNotifyEventPattern()` and `@PgNotifyMessagePattern()`.
+These one are an alternative to standard decorators `@EventPattern()` and `@MessagePattern()`.
+
+Message handler's binding can be used only within the controller classes:
+
+```typescript
+@Controller()
+export class AppController {
+
+  @PgNotifyEventPattern({event: 'greeting'})
+  @UsePipes(new ValidationPipe())
+  onGreetingEvent(@Payload() payload: any, @Ctx() context: PgNotifyContext): void {
+    console.log(payload.message);
+  }
+
+  @PgNotifyMessagePattern('greeting')
+  @UsePipes(new ValidationPipe())
+  onGreetingRequest(@Payload() payload: any, @Ctx() context: PgNotifyContext): string {
+    console.log(payload.message);
+    return 'Hello!';
+  }
+
+}
+```
+
+Standard decorator `@Ctx()` allows access to the context of the incoming request. In our case context object is an instance of `PgNotifyContext`. 
 
 #### Setup `PgNotifyClient` as client proxy.
 
