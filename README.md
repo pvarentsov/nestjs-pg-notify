@@ -72,6 +72,8 @@ These one are an alternative to standard decorators `@EventPattern()` and `@Mess
 Message handler's binding can be used only within the controller classes:
 
 ```typescript
+import { PgNotifyContext, PgNotifyEventPattern, PgNotifyMessagePattern } from 'nestjs-pg-notify';
+
 @Controller()
 export class AppController {
 
@@ -141,7 +143,11 @@ export class AppService {
   sendRequest(): Observable<PgNotifyResponse> {
     return this.client.send('greeting', {message: 'Hello!'}).pipe(
       timeout(2_000),
-      tap(response => console.log(response))      
+      tap(response => {
+        console.log(`Status: ${response.status}`);
+        console.log(`Data: ${response.data}`);
+        console.log(`Error: ${response.error}`);
+      }),
     );
   }
 
@@ -149,6 +155,47 @@ export class AppService {
   emitEvent(): Observable<void> {
     return this.client.emit({event: 'greeting'}, {message: 'Hello!'});
   }
+}
+```
+
+#### Exception filters
+
+Client proxy generates request identifier when we send requests using `client.send()`.
+Request identifier in the context of the incoming request is the criterion for preparing an error response for the client. 
+
+To unify the structure of the response we can use `PgNotifyResponse.error()` factory.
+
+```typescript
+import { PgNotifyContext, PgNotifyResponse } from 'nestjs-pg-notify';
+
+@Catch()
+export class ExceptionFilter implements ExceptionFilter {
+  
+  catch(error: Error, host: ArgumentsHost): Observable<PgNotifyResponse|void> {
+    const context = host.switchToRpc().getContext<PgNotifyContext>();
+
+    const {status, message} = parseError(error);
+    const requestId = context.getRequestId();
+
+    Logger.error(parsedError.message, error.stack, 'PgNotifyExceptionFilter');
+
+    if (requestId) {
+      return of(PgNotifyResponse.error(parsedError.message, parsedError.status));
+    }
+
+    return of(undefined);
+  }
+  
+}
+```
+
+Then we can register filter using standard `@UseFilters()` decorator. It supports method-scope and controller-scope filters.
+
+```typescript
+@Controller()
+@UseFilters(ExceptionFilter)
+export class AppController {
+  // ...
 }
 ```
 
