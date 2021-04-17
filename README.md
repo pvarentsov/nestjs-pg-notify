@@ -170,22 +170,20 @@ import { PgNotifyContext, PgNotifyResponse } from 'nestjs-pg-notify';
 
 @Catch()
 export class ExceptionFilter implements ExceptionFilter {
-  
   catch(error: Error, host: ArgumentsHost): Observable<PgNotifyResponse|void> {
-    const context = host.switchToRpc().getContext<PgNotifyContext>();
-
     const {status, message} = parseError(error);
+    
+    const context = host.switchToRpc().getContext<PgNotifyContext>();
     const requestId = context.getRequestId();
 
-    Logger.error(parsedError.message, error.stack, 'PgNotifyExceptionFilter');
+    Logger.error(message, error.stack, 'PgNotifyExceptionFilter');
 
     if (requestId) {
-      return of(PgNotifyResponse.error(parsedError.message, parsedError.status));
+      return of(PgNotifyResponse.error(message, status));
     }
 
     return of(undefined);
   }
-  
 }
 ```
 
@@ -194,6 +192,35 @@ Then we can register filter using standard `@UseFilters()` decorator. It support
 ```typescript
 @Controller()
 @UseFilters(ExceptionFilter)
+export class AppController {
+  // ...
+}
+```
+
+### Interceptors
+
+```typescript
+import { PgNotifyContext } from 'nestjs-pg-notify';
+
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+  public intercept(context: ExecutionContext, next: CallHandler): Observable<void> {
+    const pgNotifyContext = context
+      .switchToRpc()
+      .getContext<PgNotifyContext>();
+
+    return next.handle().pipe(
+      tap((): void => Logger.log(JSON.stringify(context), LoggingInterceptor.name)),
+    );
+  }
+}
+```
+
+To register interceptor we can use `@UseInterceptors()` decorator. It also supports method-scope and controller-scope interceptors.
+
+```typescript
+@Controller()
+@UseInterceptors(LoggingInterceptor)
 export class AppController {
   // ...
 }
