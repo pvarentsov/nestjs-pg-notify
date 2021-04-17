@@ -38,7 +38,7 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
   strategy: new PgNotifyServer({
     /**
      * - Required parameter
-     * - Corresponds to the "pg" library's config
+     * - Corresponds to the "pg" library's connection config
      */  
     connection: {
       host: 'localhost',
@@ -67,9 +67,9 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
 ### Bind message handlers
 
 `NestJS PG Notify` offers two decorators to register messages handlers: `@PgNotifyEventPattern()` and `@PgNotifyMessagePattern()`.
-These one are an alternative to standard decorators `@EventPattern()` and `@MessagePattern()`.
+These one are an alternative to standard decorators: `@EventPattern()` and `@MessagePattern()`.
 
-Message handler's binding can be used only within the controller classes:
+Message handler's binding can be used only within the controller classes.
 
 ```typescript
 import { PgNotifyContext, PgNotifyEventPattern, PgNotifyMessagePattern } from 'nestjs-pg-notify';
@@ -229,7 +229,7 @@ export class AppController {
 ## Roadmap
 
 **Version 1.0.0**
-- [ ] Detailed README
+- [x] Detailed README
 - [x] Usage examples
 - [ ] Tests & coverage
 - [ ] GitHub actions
