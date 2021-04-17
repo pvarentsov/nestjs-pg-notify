@@ -14,11 +14,14 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
   private readonly subscriber: Subscriber;
   private readonly loggerService: LoggerService;
 
+  private firstConnection: boolean;
+
   constructor(options: PgNotifyOptions) {
     super();
 
     this.loggerService = options.logger || new Logger();
     this.subscriber = this.createClient(options);
+    this.firstConnection = false;
   }
 
   public async listen(callback: () => void): Promise<void> {
@@ -27,6 +30,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
       await this.listenChannels();
 
       this.bindMessageHandlers();
+      this.firstConnection = true;
     }
     catch (err) {
       this.subscriber.events.emit('error', err);
@@ -83,7 +87,18 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
   }
 
   private bindEventHandlers(subscriber: Subscriber): void {
-    subscriber.events.on('connected', () => {
+    subscriber.events.on('connected', async () => {
+      if (!this.firstConnection) {
+        try {
+          await this.listenChannels();
+          this.bindMessageHandlers();
+
+          this.firstConnection = true;
+        }
+        catch (err) {
+          this.subscriber.events.emit('error', err);
+        }
+      }
       this.loggerService.log('Connection established', PgNotifyServer.name);
     });
 
