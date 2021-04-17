@@ -1,6 +1,6 @@
 import { Controller, Delete, Inject, Post, UseFilters, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ClientProxy, Ctx, Payload } from '@nestjs/microservices';
-import { PgNotifyContext, PgNotifyEventPattern, PgNotifyMessagePattern } from 'nestjs-pg-notify';
+import { PgNotifyContext, PgNotifyEventPattern, PgNotifyMessagePattern, PgNotifyResponse } from 'nestjs-pg-notify';
 import { Observable } from 'rxjs';
 import { timeout } from 'rxjs/operators';
 import { ExceptionFilter } from './app.exception.filter';
@@ -42,8 +42,8 @@ export class AppController {
   }
 
   @Post('user')
-  createUser(): Observable<string> {
-    return this.client.send('user:created', {
+  createUser(): Observable<PgNotifyResponse> {
+    return this.client.send<PgNotifyResponse>('user:created', {
       userId: 1,
       date: new Date(),
     }).pipe(
