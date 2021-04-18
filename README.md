@@ -221,6 +221,10 @@ export class AppController {
 }
 ```
 
+## API
+
+API documentation is available [here](https://pvarentsov.github.io/nestjs-pg-notify).
+
 ## Roadmap
 
 **Version 1.0.0**
