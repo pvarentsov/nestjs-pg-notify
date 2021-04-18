@@ -1,0 +1,1 @@
+export declare const PG_NOTIFY_TRANSPORT = "PG_NOTIFY_TRANSPORT";
