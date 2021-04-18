@@ -143,11 +143,7 @@ export class AppService {
   sendRequest(): Observable<PgNotifyResponse> {
     return this.client.send('greeting', {message: 'Hello!'}).pipe(
       timeout(2_000),
-      tap(response => {
-        console.log(`Status: ${response.status}`);
-        console.log(`Data: ${response.data}`);
-        console.log(`Error: ${response.error}`);
-      }),
+      tap(response => Logger.debug(response)),
     );
   }
 
@@ -172,7 +168,6 @@ import { PgNotifyContext, PgNotifyResponse } from 'nestjs-pg-notify';
 export class ExceptionFilter implements ExceptionFilter {
   catch(error: Error, host: ArgumentsHost): Observable<PgNotifyResponse|void> {
     const {status, message} = parseError(error);
-    
     const context = host.switchToRpc().getContext<PgNotifyContext>();
     const requestId = context.getRequestId();
 
@@ -210,7 +205,7 @@ export class LoggingInterceptor implements NestInterceptor {
       .getContext<PgNotifyContext>();
 
     return next.handle().pipe(
-      tap((): void => Logger.log(JSON.stringify(pgNotifyContext), LoggingInterceptor.name)),
+      tap(() => Logger.log(JSON.stringify(pgNotifyContext), LoggingInterceptor.name)),
     );
   }
 }
