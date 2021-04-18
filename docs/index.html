@@ -1,0 +1,362 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>nestjs-pg-notify</title>
+	<meta name="description" content="Documentation for nestjs-pg-notify">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">nestjs-pg-notify</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>nestjs-pg-notify</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#nestjs-pg-notify" id="nestjs-pg-notify" style="color: inherit; text-decoration: none;">
+					<h1>NestJS PG Notify</h1>
+				</a>
+				<p>NestJS custom transport strategy for PostgreSQL Pub/Sub.</p>
+				<p><a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg" alt="License: MIT"></a>
+				<img src="https://img.shields.io/npm/v/nestjs-pg-notify.svg" alt=""></p>
+				<a href="#postgresql-async-notifications" id="postgresql-async-notifications" style="color: inherit; text-decoration: none;">
+					<h2>PostgreSQL async notifications</h2>
+				</a>
+				<p>PostgreSQL can be used as Pub/Sub message broker.
+				The functionality is similar to the Redis Pub/Sub, but has its own features and limitations.</p>
+				<p>The <a href="#References">References</a> section contains links that may be useful to familiarize
+				with the PostgreSQL asynchronous notifications.</p>
+				<a href="#custom-transporter" id="custom-transporter" style="color: inherit; text-decoration: none;">
+					<h2>Custom transporter</h2>
+				</a>
+				<p><code>NestJS PG Notify</code> implements Pub/Sub messaging paradigm using PostgreSQL as a <a href="https://docs.nestjs.com/microservices/custom-transport">NestJS custom transporter</a>.
+				Under the hood it wraps <a href="https://github.com/andywer/pg-listen">pg-listen</a> library.</p>
+				<p>It can be used in <a href="https://docs.nestjs.com/microservices/basics">microservice</a> and <a href="https://docs.nestjs.com/faq/hybrid-application">hybrid</a>
+				NestJS applications. The <a href="./example">example</a> folder contains examples for both types of applications.</p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<pre><code class="language-bash"><span style="color: #000000">$ npm i nestjs-pg-notify</span>
+</code></pre>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<a href="#setup-pgnotifyserver-as-custom-strategy" id="setup-pgnotifyserver-as-custom-strategy" style="color: inherit; text-decoration: none;">
+					<h3>Setup <code>PgNotifyServer</code> as custom strategy</h3>
+				</a>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyServer</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">app</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">NestFactory</span><span style="color: #000000">.</span><span style="color: #795E26">createMicroservice</span><span style="color: #000000">&lt;</span><span style="color: #267F99">MicroserviceOptions</span><span style="color: #000000">&gt;(</span><span style="color: #001080">AppModule</span><span style="color: #000000">, {</span>
+<span style="color: #000000">  </span><span style="color: #001080">strategy:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">PgNotifyServer</span><span style="color: #000000">({</span>
+<span style="color: #000000">    </span><span style="color: #008000">/**</span>
+<span style="color: #008000">     * - Required parameter</span>
+<span style="color: #008000">     * - Corresponds to the &quot;pg&quot; library&#039;s connection config</span>
+<span style="color: #008000">     */</span><span style="color: #000000">  </span>
+<span style="color: #000000">    </span><span style="color: #001080">connection:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">host:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;localhost&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">port:</span><span style="color: #000000"> </span><span style="color: #098658">5432</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">database:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;pgnotify&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">user:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;pgnotify&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">password:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;pgnotify&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">    </span><span style="color: #008000">/**</span>
+<span style="color: #008000">     * - Optional parameter</span>
+<span style="color: #008000">     * - Contains retry-strategy config passing to the &quot;pg-listen&quot; library</span>
+<span style="color: #008000">     */</span>
+<span style="color: #000000">    </span><span style="color: #001080">strategy:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">retryInterval:</span><span style="color: #000000"> </span><span style="color: #098658">1_000</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">retryTimeout:</span><span style="color: #000000"> </span><span style="color: #267F99">Number</span><span style="color: #000000">.POSITIVE_INFINITY,</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">    </span><span style="color: #008000">/**</span>
+<span style="color: #008000">     * - Optional parameter</span>
+<span style="color: #008000">     * - Overriding of the logger with own implementation</span>
+<span style="color: #008000">     */</span>
+<span style="color: #000000">    </span><span style="color: #001080">logger:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Logger</span><span style="color: #000000">(),</span>
+<span style="color: #000000">  })</span>
+<span style="color: #000000">});</span>
+</code></pre>
+				<a href="#bind-message-handlers" id="bind-message-handlers" style="color: inherit; text-decoration: none;">
+					<h3>Bind message handlers</h3>
+				</a>
+				<p><code>NestJS PG Notify</code> offers two decorators to register messages handlers: <code>@PgNotifyEventPattern()</code> and <code>@PgNotifyMessagePattern()</code>.
+				These one are an alternative to standard decorators: <code>@EventPattern()</code> and <code>@MessagePattern()</code>.</p>
+				<p>Message handler&#39;s binding can be used only within the controller classes.</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyContext</span><span style="color: #000000">, </span><span style="color: #001080">PgNotifyEventPattern</span><span style="color: #000000">, </span><span style="color: #001080">PgNotifyMessagePattern</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">Controller</span><span style="color: #000000">()</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">AppController</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">  @</span><span style="color: #795E26">PgNotifyEventPattern</span><span style="color: #000000">({</span><span style="color: #001080">event:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;greeting&#039;</span><span style="color: #000000">})</span>
+<span style="color: #000000">  @</span><span style="color: #795E26">UsePipes</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ValidationPipe</span><span style="color: #000000">())</span>
+<span style="color: #000000">  </span><span style="color: #795E26">onGreetingEvent</span><span style="color: #000000">(@</span><span style="color: #795E26">Payload</span><span style="color: #000000">() </span><span style="color: #001080">payload</span><span style="color: #000000">: </span><span style="color: #267F99">any</span><span style="color: #000000">, @</span><span style="color: #795E26">Ctx</span><span style="color: #000000">() </span><span style="color: #001080">context</span><span style="color: #000000">: </span><span style="color: #267F99">PgNotifyContext</span><span style="color: #000000">): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">payload</span><span style="color: #000000">.</span><span style="color: #001080">message</span><span style="color: #000000">);</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  @</span><span style="color: #795E26">PgNotifyMessagePattern</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;greeting&#039;</span><span style="color: #000000">)</span>
+<span style="color: #000000">  @</span><span style="color: #795E26">UsePipes</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ValidationPipe</span><span style="color: #000000">())</span>
+<span style="color: #000000">  </span><span style="color: #795E26">onGreetingRequest</span><span style="color: #000000">(@</span><span style="color: #795E26">Payload</span><span style="color: #000000">() </span><span style="color: #001080">payload</span><span style="color: #000000">: </span><span style="color: #267F99">any</span><span style="color: #000000">, @</span><span style="color: #795E26">Ctx</span><span style="color: #000000">() </span><span style="color: #001080">context</span><span style="color: #000000">: </span><span style="color: #267F99">PgNotifyContext</span><span style="color: #000000">): </span><span style="color: #267F99">string</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">payload</span><span style="color: #000000">.</span><span style="color: #001080">message</span><span style="color: #000000">);</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;Hello!&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>Standard decorator <code>@Ctx()</code> allows access to the context of the incoming request. In our case context object is an instance of <code>PgNotifyContext</code>. </p>
+				<a href="#setup-pgnotifyclient-as-client-proxy" id="setup-pgnotifyclient-as-client-proxy" style="color: inherit; text-decoration: none;">
+					<h3>Setup <code>PgNotifyClient</code> as client proxy</h3>
+				</a>
+				<p>Client proxy can be registered as a custom provider. The configuration is the same as the configuration of <code>PgNotifyServer</code>.</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyClient</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">Module</span><span style="color: #000000">({</span>
+<span style="color: #000000">  </span><span style="color: #001080">providers:</span><span style="color: #000000"> [</span>
+<span style="color: #000000">    {</span>
+<span style="color: #000000">      </span><span style="color: #001080">provide:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;PG_NOTIFY_CLIENT&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #795E26">useFactory</span><span style="color: #001080">:</span><span style="color: #000000"> (): </span><span style="color: #267F99">ClientProxy</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">PgNotifyClient</span><span style="color: #000000">({</span>
+<span style="color: #000000">        </span><span style="color: #001080">connection:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">          </span><span style="color: #001080">host:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;localhost&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">          </span><span style="color: #001080">port:</span><span style="color: #000000"> </span><span style="color: #098658">5432</span><span style="color: #000000">,</span>
+<span style="color: #000000">          </span><span style="color: #001080">database:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;pgnotify&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">          </span><span style="color: #001080">user:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;pgnotify&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">          </span><span style="color: #001080">password:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;pgnotify&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        },</span>
+<span style="color: #000000">        </span><span style="color: #001080">strategy:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">          </span><span style="color: #001080">retryInterval:</span><span style="color: #000000"> </span><span style="color: #098658">1_000</span><span style="color: #000000">,</span>
+<span style="color: #000000">          </span><span style="color: #001080">retryTimeout:</span><span style="color: #000000"> </span><span style="color: #267F99">Number</span><span style="color: #000000">.POSITIVE_INFINITY,</span>
+<span style="color: #000000">        }, </span>
+<span style="color: #000000">      })</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">  ],</span>
+<span style="color: #000000">  </span><span style="color: #001080">exports:</span><span style="color: #000000"> [</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&#039;PG_NOTIFY_CLIENT&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  ]</span>
+<span style="color: #000000">})</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">AppModule</span><span style="color: #000000"> {}</span>
+</code></pre>
+				<p>Then we can inject client proxy.</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyResponse</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">AppService</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span>
+<span style="color: #000000">    @</span><span style="color: #795E26">Inject</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;PG_NOTIFY_CLIENT&#039;</span><span style="color: #000000">)</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #0000FF">readonly</span><span style="color: #000000"> </span><span style="color: #001080">client</span><span style="color: #000000">: </span><span style="color: #267F99">ClientProxy</span><span style="color: #000000">,</span>
+<span style="color: #000000">  ) {}</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">// Sends request and expects response</span>
+<span style="color: #000000">  </span><span style="color: #795E26">sendRequest</span><span style="color: #000000">(): </span><span style="color: #267F99">Observable</span><span style="color: #000000">&lt;</span><span style="color: #267F99">PgNotifyResponse</span><span style="color: #000000">&gt; {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">client</span><span style="color: #000000">.</span><span style="color: #795E26">send</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;greeting&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">message:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;Hello!&#039;</span><span style="color: #000000">}).</span><span style="color: #795E26">pipe</span><span style="color: #000000">(</span>
+<span style="color: #000000">      </span><span style="color: #795E26">timeout</span><span style="color: #000000">(</span><span style="color: #098658">2_000</span><span style="color: #000000">),</span>
+<span style="color: #000000">      </span><span style="color: #795E26">tap</span><span style="color: #000000">(</span><span style="color: #001080">response</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">Logger</span><span style="color: #000000">.</span><span style="color: #795E26">debug</span><span style="color: #000000">(</span><span style="color: #001080">response</span><span style="color: #000000">)),</span>
+<span style="color: #000000">    );</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">// Emits event</span>
+<span style="color: #000000">  </span><span style="color: #795E26">emitEvent</span><span style="color: #000000">(): </span><span style="color: #267F99">Observable</span><span style="color: #000000">&lt;</span><span style="color: #267F99">void</span><span style="color: #000000">&gt; {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">client</span><span style="color: #000000">.</span><span style="color: #795E26">emit</span><span style="color: #000000">({</span><span style="color: #001080">event:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;greeting&#039;</span><span style="color: #000000">}, {</span><span style="color: #001080">message:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;Hello!&#039;</span><span style="color: #000000">});</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<a href="#exception-filters" id="exception-filters" style="color: inherit; text-decoration: none;">
+					<h3>Exception filters</h3>
+				</a>
+				<p>Client proxy generates request identifier when we send requests using <code>client.send()</code>.
+				Request identifier in the context of the incoming request is the criterion for preparing an error response for the client. </p>
+				<p>To unify the structure of the response we can use <code>PgNotifyResponse.error()</code> factory.</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyContext</span><span style="color: #000000">, </span><span style="color: #001080">PgNotifyResponse</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">Catch</span><span style="color: #000000">()</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">ExceptionFilter</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">ExceptionFilter</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #795E26">catch</span><span style="color: #000000">(</span><span style="color: #001080">error</span><span style="color: #000000">: </span><span style="color: #267F99">Error</span><span style="color: #000000">, </span><span style="color: #001080">host</span><span style="color: #000000">: </span><span style="color: #267F99">ArgumentsHost</span><span style="color: #000000">): </span><span style="color: #267F99">Observable</span><span style="color: #000000">&lt;</span><span style="color: #267F99">PgNotifyResponse</span><span style="color: #000000">|</span><span style="color: #267F99">void</span><span style="color: #000000">&gt; {</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">status</span><span style="color: #000000">, </span><span style="color: #0070C1">message</span><span style="color: #000000">} = </span><span style="color: #795E26">parseError</span><span style="color: #000000">(</span><span style="color: #001080">error</span><span style="color: #000000">);</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">context</span><span style="color: #000000"> = </span><span style="color: #001080">host</span><span style="color: #000000">.</span><span style="color: #795E26">switchToRpc</span><span style="color: #000000">().</span><span style="color: #795E26">getContext</span><span style="color: #000000">&lt;</span><span style="color: #267F99">PgNotifyContext</span><span style="color: #000000">&gt;();</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">requestId</span><span style="color: #000000"> = </span><span style="color: #001080">context</span><span style="color: #000000">.</span><span style="color: #795E26">getRequestId</span><span style="color: #000000">();</span>
+
+<span style="color: #000000">    </span><span style="color: #001080">Logger</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span><span style="color: #001080">message</span><span style="color: #000000">, </span><span style="color: #001080">error</span><span style="color: #000000">.</span><span style="color: #001080">stack</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;PgNotifyExceptionFilter&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">requestId</span><span style="color: #000000">) {</span>
+<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #795E26">of</span><span style="color: #000000">(</span><span style="color: #001080">PgNotifyResponse</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span><span style="color: #001080">message</span><span style="color: #000000">, </span><span style="color: #001080">status</span><span style="color: #000000">));</span>
+<span style="color: #000000">    }</span>
+
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #795E26">of</span><span style="color: #000000">(</span><span style="color: #0000FF">undefined</span><span style="color: #000000">);</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>Then we can register filter using standard <code>@UseFilters()</code> decorator. It supports method-scope and controller-scope modes.</p>
+				<pre><code class="language-typescript"><span style="color: #000000">@</span><span style="color: #795E26">Controller</span><span style="color: #000000">()</span>
+<span style="color: #000000">@</span><span style="color: #795E26">UseFilters</span><span style="color: #000000">(</span><span style="color: #001080">ExceptionFilter</span><span style="color: #000000">)</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">AppController</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// ...</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<a href="#interceptors" id="interceptors" style="color: inherit; text-decoration: none;">
+					<h3>Interceptors</h3>
+				</a>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyContext</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">Injectable</span><span style="color: #000000">()</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">LoggingInterceptor</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">NestInterceptor</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">public</span><span style="color: #000000"> </span><span style="color: #795E26">intercept</span><span style="color: #000000">(</span><span style="color: #001080">context</span><span style="color: #000000">: </span><span style="color: #267F99">ExecutionContext</span><span style="color: #000000">, </span><span style="color: #001080">next</span><span style="color: #000000">: </span><span style="color: #267F99">CallHandler</span><span style="color: #000000">): </span><span style="color: #267F99">Observable</span><span style="color: #000000">&lt;</span><span style="color: #267F99">void</span><span style="color: #000000">&gt; {</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pgNotifyContext</span><span style="color: #000000"> = </span><span style="color: #001080">context</span>
+<span style="color: #000000">      .</span><span style="color: #795E26">switchToRpc</span><span style="color: #000000">()</span>
+<span style="color: #000000">      .</span><span style="color: #795E26">getContext</span><span style="color: #000000">&lt;</span><span style="color: #267F99">PgNotifyContext</span><span style="color: #000000">&gt;();</span>
+
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #001080">next</span><span style="color: #000000">.</span><span style="color: #795E26">handle</span><span style="color: #000000">().</span><span style="color: #795E26">pipe</span><span style="color: #000000">(</span>
+<span style="color: #000000">      </span><span style="color: #795E26">tap</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">Logger</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #267F99">JSON</span><span style="color: #000000">.</span><span style="color: #795E26">stringify</span><span style="color: #000000">(</span><span style="color: #001080">pgNotifyContext</span><span style="color: #000000">), </span><span style="color: #001080">LoggingInterceptor</span><span style="color: #000000">.</span><span style="color: #001080">name</span><span style="color: #000000">)),</span>
+<span style="color: #000000">    );</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>To register interceptor we can use <code>@UseInterceptors()</code> decorator. It also supports method-scope and controller-scope modes.</p>
+				<pre><code class="language-typescript"><span style="color: #000000">@</span><span style="color: #795E26">Controller</span><span style="color: #000000">()</span>
+<span style="color: #000000">@</span><span style="color: #795E26">UseInterceptors</span><span style="color: #000000">(</span><span style="color: #001080">LoggingInterceptor</span><span style="color: #000000">)</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">AppController</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// ...</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<a href="#roadmap" id="roadmap" style="color: inherit; text-decoration: none;">
+					<h2>Roadmap</h2>
+				</a>
+				<p><strong>Version 1.0.0</strong></p>
+				<ul>
+					<li><input checked="" disabled="" type="checkbox"> Detailed README</li>
+					<li><input checked="" disabled="" type="checkbox"> Usage examples</li>
+					<li><input disabled="" type="checkbox"> Tests &amp; coverage</li>
+					<li><input disabled="" type="checkbox"> GitHub actions</li>
+				</ul>
+				<a href="#references" id="references" style="color: inherit; text-decoration: none;">
+					<h2>References</h2>
+				</a>
+				<ol>
+					<li>PostgreSQL Documentation:<ul>
+							<li><a href="https://www.postgresql.org/docs/9.6/libpq-notify.html">Asynchronous Notification</a></li>
+							<li><a href="https://www.postgresql.org/docs/9.6/sql-notify.html">NOTIFY</a></li>
+							<li><a href="https://www.postgresql.org/docs/9.6/sql-listen.html">LISTEN</a> </li>
+						</ul>
+					</li>
+					<li>PgBouncer Documentation:<ul>
+							<li><a href="https://www.pgbouncer.org/features.html">Transaction pool mode does not support NOTIFY/LISTEN features</a></li>
+						</ul>
+					</li>
+					<li>NestJS Documentation:<ul>
+							<li><a href="https://docs.nestjs.com/microservices/basics">Microservices</a></li>
+							<li><a href="https://docs.nestjs.com/faq/hybrid-application">Hybrid applications</a></li>
+							<li><a href="https://docs.nestjs.com/microservices/custom-transport">Custom transporters</a></li>
+						</ul>
+					</li>
+					<li>Dependencies:<ul>
+							<li><a href="https://github.com/andywer/pg-listen">pg-listen</a></li>
+						</ul>
+					</li>
+				</ol>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-class">
+						<a href="classes/pgnotifyclient.html" class="tsd-kind-icon">Pg<wbr>Notify<wbr>Client</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/pgnotifycontext.html" class="tsd-kind-icon">Pg<wbr>Notify<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/pgnotifyresponse.html" class="tsd-kind-icon">Pg<wbr>Notify<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/pgnotifyserver.html" class="tsd-kind-icon">Pg<wbr>Notify<wbr>Server</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#pgnotifyconnectionstrategy" class="tsd-kind-icon">Pg<wbr>Notify<wbr>Connection<wbr>Strategy</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#pgnotifyoptions" class="tsd-kind-icon">Pg<wbr>Notify<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#pgnotifyeventpattern" class="tsd-kind-icon">Pg<wbr>Notify<wbr>Event<wbr>Pattern</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#pgnotifymessagepattern" class="tsd-kind-icon">Pg<wbr>Notify<wbr>Message<wbr>Pattern</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
