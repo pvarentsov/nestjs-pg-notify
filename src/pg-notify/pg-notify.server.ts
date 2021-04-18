@@ -14,25 +14,27 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
   private readonly subscriber: Subscriber;
   private readonly loggerService: LoggerService;
 
-  private firstConnection: boolean;
+  private firstConnected: boolean;
 
   constructor(options: PgNotifyOptions) {
     super();
 
     this.loggerService = options.logger || new Logger();
     this.subscriber = this.createClient(options);
-    this.firstConnection = false;
+    this.firstConnected = false;
   }
 
   public async listen(callback: () => void): Promise<void> {
     try {
+      this.firstConnected = true;
+
       await this.subscriber.connect();
       await this.listenChannels();
 
       this.bindMessageHandlers();
-      this.firstConnection = true;
     }
     catch (err) {
+      this.firstConnected = false;
       this.subscriber.events.emit('error', err);
     }
     finally {
@@ -88,12 +90,12 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
 
   private bindEventHandlers(subscriber: Subscriber): void {
     subscriber.events.on('connected', async () => {
-      if (!this.firstConnection) {
+      if (!this.firstConnected) {
         try {
           await this.listenChannels();
           this.bindMessageHandlers();
 
-          this.firstConnection = true;
+          this.firstConnected = true;
         }
         catch (err) {
           this.subscriber.events.emit('error', err);

@@ -10,9 +10,7 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
   private readonly loggerService: LoggerService;
   private readonly subscriptionsCount: Map<string, number> = new Map();
 
-  private firstConnection: boolean;
-  private firstReconnection: boolean;
-
+  private firstConnected: boolean;
   private connected: boolean;
 
   constructor(options: PgNotifyOptions) {
@@ -21,30 +19,30 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
     this.loggerService = options.logger || new Logger();
     this.publisher = this.createClient(options);
 
-    this.firstConnection = false;
-    this.firstReconnection = false;
+    this.firstConnected = false;
     this.connected = false;
   }
 
   public async onApplicationBootstrap(): Promise<void> {
-    await this.connect();
+    await this.connectOnBootstrap();
+  }
+
+  public async connectOnBootstrap(): Promise<void> {
+    try {
+      this.firstConnected = true;
+
+      await this.publisher.connect();
+      this.bindMessageHandlers();
+    }
+    catch (error) {
+      this.firstConnected = false;
+      this.publisher.events.emit('error', error);
+    }
   }
 
   public async connect(): Promise<void> {
-    if (this.firstConnection) {
-      return;
-    }
-    if (!this.connected && this.firstReconnection) {
-      throw new Error('Client has encountered a connection error and is not queryable');
-    }
-    try {
-      await this.publisher.connect();
-
-      this.bindMessageHandlers();
-      this.firstConnection = true;
-    }
-    catch (error) {
-      this.publisher.events.emit('error', error);
+    if (!this.connected) {
+      throw new Error('Client is not connected');
     }
   }
 
@@ -118,12 +116,12 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
 
   private bindEventHandlers(publisher: Publisher): void {
     publisher.events.on('connected', () => {
-      if (!this.firstConnection) {
+      if (!this.firstConnected) {
         this.bindMessageHandlers();
       }
 
       this.connected = true;
-      this.firstConnection = true;
+      this.firstConnected = true;
 
       this.loggerService.log('Connection established', PgNotifyClient.name);
     });
@@ -136,9 +134,7 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
     });
 
     publisher.events.on('reconnect', attempt => {
-      this.firstReconnection = true;
       this.connected = false;
-
       this.loggerService.error(`Connection refused. Retry attempt ${attempt}...`, undefined, PgNotifyClient.name);
     });
   }
