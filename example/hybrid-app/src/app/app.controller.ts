@@ -20,7 +20,7 @@ export class AppController {
   ) {}
 
   @PgNotifyEventPattern('user:created')
-  @UsePipes(new ValidationPipe())
+  @UsePipes(new ValidationPipe({transform: true}))
   onUserCreated(
     @Payload() payload: AppUserCreatedDto,
     @Ctx() context: PgNotifyContext,
@@ -31,7 +31,7 @@ export class AppController {
   }
 
   @PgNotifyMessagePattern({event: 'removed', target: 'user'})
-  @UsePipes(new ValidationPipe())
+  @UsePipes(new ValidationPipe({transform: true}))
   onUserRemoved(
     @Payload() payload: AppUserRemovedDto,
     @Ctx() context: PgNotifyContext,
