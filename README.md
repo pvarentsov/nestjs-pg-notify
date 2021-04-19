@@ -7,16 +7,15 @@ NestJS custom transport strategy for PostgreSQL Pub/Sub.
 
 ## PostgreSQL async notifications
 
-PostgreSQL can be used as Pub/Sub message broker.
-The functionality is similar to the Redis Pub/Sub, but has its own features and limitations.
+PostgreSQL can be used as a Pub/Sub message broker.
+Its functionality is similar to the Redis Pub/Sub, but has its own features and limitations.
 
-The [References](#References) section contains links that may be useful to familiarize 
-with the PostgreSQL asynchronous notifications.
+The [References](#References) section contains links that you may find useful to familiarize yourself with the PostgreSQL asynchronous notifications.
 
 ## Custom transporter
 
 `NestJS PG Notify` implements Pub/Sub messaging paradigm using PostgreSQL as a [NestJS custom transporter](https://docs.nestjs.com/microservices/custom-transport). 
-Under the hood it wraps [pg-listen](https://github.com/andywer/pg-listen) library.
+It wraps the [pg-listen](https://github.com/andywer/pg-listen) library under the hood.
 
 It can be used in [microservice](https://docs.nestjs.com/microservices/basics) and [hybrid](https://docs.nestjs.com/faq/hybrid-application) 
 NestJS applications. The [example](./example) folder contains examples for both types of applications.
@@ -49,7 +48,7 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
     },
     /**
      * - Optional parameter
-     * - Contains retry-strategy config passing to the "pg-listen" library
+     * - Contains retry-strategy config passing the data to the "pg-listen" library
      */
     strategy: {
       retryInterval: 1_000,
@@ -67,9 +66,9 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
 ### Bind message handlers
 
 `NestJS PG Notify` offers two decorators to register messages handlers: `@PgNotifyEventPattern()` and `@PgNotifyMessagePattern()`.
-These one are an alternative to standard decorators: `@EventPattern()` and `@MessagePattern()`.
+These are an alternative to standard decorators: `@EventPattern()` and `@MessagePattern()`.
 
-Message handler's binding can be used only within the controller classes.
+Message handler's binding can be used only within controller classes.
 
 ```typescript
 import { PgNotifyContext, PgNotifyEventPattern, PgNotifyMessagePattern } from 'nestjs-pg-notify';
@@ -93,11 +92,11 @@ export class AppController {
 }
 ```
 
-Standard decorator `@Ctx()` allows access to the context of the incoming request. In our case context object is an instance of `PgNotifyContext`. 
+The standard decorator `@Ctx()` allows access to the context of the incoming request. In our case, the context object is an instance of `PgNotifyContext`. 
 
 ### Setup `PgNotifyClient` as client proxy
 
-Client proxy can be registered as a custom provider. The configuration is the same as the configuration of `PgNotifyServer`.
+The client proxy can be registered as a custom provider. The configuration is the same as the configuration of the `PgNotifyServer`.
 
 ```typescript
 import { PgNotifyClient } from 'nestjs-pg-notify';
@@ -128,7 +127,7 @@ import { PgNotifyClient } from 'nestjs-pg-notify';
 export class AppModule {}
 ```
 
-Then we can inject client proxy.
+Then we can inject the client proxy.
 
 ```typescript
 import { PgNotifyResponse } from 'nestjs-pg-notify';
@@ -156,10 +155,10 @@ export class AppService {
 
 ### Exception filters
 
-Client proxy generates request identifier when we send requests using `client.send()`.
-Request identifier in the context of the incoming request is the criterion for preparing an error response for the client. 
+The client proxy generates request identifier when we send requests using `client.send()`.
+The request identifier in the context of the incoming request means that we need to prepare an error response for the client. 
 
-To unify the structure of the response we can use `PgNotifyResponse.error()` factory.
+We can use the `PgNotifyResponse.error()` factory in order to unify the structure of the response.
 
 ```typescript
 import { PgNotifyContext, PgNotifyResponse } from 'nestjs-pg-notify';
@@ -182,7 +181,7 @@ export class ExceptionFilter implements ExceptionFilter {
 }
 ```
 
-Then we can register filter using standard `@UseFilters()` decorator. It supports method-scope and controller-scope modes.
+Then we can register the filter using the standard `@UseFilters()` decorator. It supports method-scope and controller-scope modes.
 
 ```typescript
 @Controller()
