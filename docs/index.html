@@ -67,15 +67,14 @@
 				<a href="#postgresql-async-notifications" id="postgresql-async-notifications" style="color: inherit; text-decoration: none;">
 					<h2>PostgreSQL async notifications</h2>
 				</a>
-				<p>PostgreSQL can be used as Pub/Sub message broker.
-				The functionality is similar to the Redis Pub/Sub, but has its own features and limitations.</p>
-				<p>The <a href="#References">References</a> section contains links that may be useful to familiarize
-				with the PostgreSQL asynchronous notifications.</p>
+				<p>PostgreSQL can be used as a Pub/Sub message broker.
+				Its functionality is similar to the Redis Pub/Sub, but has its own features and limitations.</p>
+				<p>The <a href="#References">References</a> section contains links that you may find useful to familiarize yourself with the PostgreSQL asynchronous notifications.</p>
 				<a href="#custom-transporter" id="custom-transporter" style="color: inherit; text-decoration: none;">
 					<h2>Custom transporter</h2>
 				</a>
 				<p><code>NestJS PG Notify</code> implements Pub/Sub messaging paradigm using PostgreSQL as a <a href="https://docs.nestjs.com/microservices/custom-transport">NestJS custom transporter</a>.
-				Under the hood it wraps <a href="https://github.com/andywer/pg-listen">pg-listen</a> library.</p>
+				It wraps the <a href="https://github.com/andywer/pg-listen">pg-listen</a> library under the hood.</p>
 				<p>It can be used in <a href="https://docs.nestjs.com/microservices/basics">microservice</a> and <a href="https://docs.nestjs.com/faq/hybrid-application">hybrid</a>
 				NestJS applications. The <a href="./example">example</a> folder contains examples for both types of applications.</p>
 				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
@@ -106,7 +105,7 @@
 <span style="color: #000000">    },</span>
 <span style="color: #000000">    </span><span style="color: #008000">/**</span>
 <span style="color: #008000">     * - Optional parameter</span>
-<span style="color: #008000">     * - Contains retry-strategy config passing to the &quot;pg-listen&quot; library</span>
+<span style="color: #008000">     * - Contains retry-strategy config passing the data to the &quot;pg-listen&quot; library</span>
 <span style="color: #008000">     */</span>
 <span style="color: #000000">    </span><span style="color: #001080">strategy:</span><span style="color: #000000"> {</span>
 <span style="color: #000000">      </span><span style="color: #001080">retryInterval:</span><span style="color: #000000"> </span><span style="color: #098658">1_000</span><span style="color: #000000">,</span>
@@ -124,8 +123,8 @@
 					<h3>Bind message handlers</h3>
 				</a>
 				<p><code>NestJS PG Notify</code> offers two decorators to register messages handlers: <code>@PgNotifyEventPattern()</code> and <code>@PgNotifyMessagePattern()</code>.
-				These one are an alternative to standard decorators: <code>@EventPattern()</code> and <code>@MessagePattern()</code>.</p>
-				<p>Message handler&#39;s binding can be used only within the controller classes.</p>
+				These are an alternative to standard decorators: <code>@EventPattern()</code> and <code>@MessagePattern()</code>.</p>
+				<p>Message handler&#39;s binding can be used only within controller classes.</p>
 				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyContext</span><span style="color: #000000">, </span><span style="color: #001080">PgNotifyEventPattern</span><span style="color: #000000">, </span><span style="color: #001080">PgNotifyMessagePattern</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #000000">@</span><span style="color: #795E26">Controller</span><span style="color: #000000">()</span>
@@ -146,11 +145,11 @@
 
 <span style="color: #000000">}</span>
 </code></pre>
-				<p>Standard decorator <code>@Ctx()</code> allows access to the context of the incoming request. In our case context object is an instance of <code>PgNotifyContext</code>. </p>
+				<p>The standard decorator <code>@Ctx()</code> allows access to the context of the incoming request. In our case, the context object is an instance of <code>PgNotifyContext</code>. </p>
 				<a href="#setup-pgnotifyclient-as-client-proxy" id="setup-pgnotifyclient-as-client-proxy" style="color: inherit; text-decoration: none;">
 					<h3>Setup <code>PgNotifyClient</code> as client proxy</h3>
 				</a>
-				<p>Client proxy can be registered as a custom provider. The configuration is the same as the configuration of <code>PgNotifyServer</code>.</p>
+				<p>The client proxy can be registered as a custom provider. The configuration is the same as the configuration of the <code>PgNotifyServer</code>.</p>
 				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyClient</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #000000">@</span><span style="color: #795E26">Module</span><span style="color: #000000">({</span>
@@ -178,7 +177,7 @@
 <span style="color: #000000">})</span>
 <span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">AppModule</span><span style="color: #000000"> {}</span>
 </code></pre>
-				<p>Then we can inject client proxy.</p>
+				<p>Then we can inject the client proxy.</p>
 				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyResponse</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">AppService</span><span style="color: #000000"> {</span>
@@ -204,9 +203,9 @@
 				<a href="#exception-filters" id="exception-filters" style="color: inherit; text-decoration: none;">
 					<h3>Exception filters</h3>
 				</a>
-				<p>Client proxy generates request identifier when we send requests using <code>client.send()</code>.
-				Request identifier in the context of the incoming request is the criterion for preparing an error response for the client. </p>
-				<p>To unify the structure of the response we can use <code>PgNotifyResponse.error()</code> factory.</p>
+				<p>The client proxy generates request identifier when we send requests using <code>client.send()</code>.
+				The request identifier in the context of the incoming request means that we need to prepare an error response for the client. </p>
+				<p>We can use the <code>PgNotifyResponse.error()</code> factory in order to unify the structure of the response.</p>
 				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyContext</span><span style="color: #000000">, </span><span style="color: #001080">PgNotifyResponse</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #000000">@</span><span style="color: #795E26">Catch</span><span style="color: #000000">()</span>
@@ -226,7 +225,7 @@
 <span style="color: #000000">  }</span>
 <span style="color: #000000">}</span>
 </code></pre>
-				<p>Then we can register filter using standard <code>@UseFilters()</code> decorator. It supports method-scope and controller-scope modes.</p>
+				<p>Then we can register the filter using the standard <code>@UseFilters()</code> decorator. It supports method-scope and controller-scope modes.</p>
 				<pre><code class="language-typescript"><span style="color: #000000">@</span><span style="color: #795E26">Controller</span><span style="color: #000000">()</span>
 <span style="color: #000000">@</span><span style="color: #795E26">UseFilters</span><span style="color: #000000">(</span><span style="color: #001080">ExceptionFilter</span><span style="color: #000000">)</span>
 <span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">AppController</span><span style="color: #000000"> {</span>
