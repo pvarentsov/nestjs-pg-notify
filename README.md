@@ -56,7 +56,7 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
     },
     /**
      * - Optional parameter
-     * - Overriding of the logger with own implementation
+     * - Overrides default logger
      */
     logger: new Logger(),
   })
@@ -65,7 +65,7 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
 
 ### Bind message handlers
 
-`NestJS PG Notify` offers two decorators to register messages handlers: `@PgNotifyEventPattern()` and `@PgNotifyMessagePattern()`.
+`NestJS PG Notify` offers two decorators to register message handlers: `@PgNotifyEventPattern()` and `@PgNotifyMessagePattern()`.
 These are an alternative to standard decorators: `@EventPattern()` and `@MessagePattern()`.
 
 Message handler's binding can be used only within controller classes.
@@ -79,13 +79,13 @@ export class AppController {
   @PgNotifyEventPattern({event: 'greeting'})
   @UsePipes(new ValidationPipe())
   onGreetingEvent(@Payload() payload: any, @Ctx() context: PgNotifyContext): void {
-    console.log(payload.message);
+    Logger.log(payload.message);
   }
 
   @PgNotifyMessagePattern('greeting')
   @UsePipes(new ValidationPipe())
   onGreetingRequest(@Payload() payload: any, @Ctx() context: PgNotifyContext): string {
-    console.log(payload.message);
+     Logger.log(payload.message);
     return 'Hello!';
   }
 
@@ -137,17 +137,17 @@ export class AppService {
     @Inject('PG_NOTIFY_CLIENT')
     private readonly client: ClientProxy,
   ) {}
-
-  // Sends request and expects response
+   
   sendRequest(): Observable<PgNotifyResponse> {
+    // Send request and expect response
     return this.client.send('greeting', {message: 'Hello!'}).pipe(
       timeout(2_000),
       tap(response => Logger.debug(response)),
     );
   }
-
-  // Emits event
+  
   emitEvent(): Observable<void> {
+    // Emit event
     return this.client.emit({event: 'greeting'}, {message: 'Hello!'});
   }
 }
