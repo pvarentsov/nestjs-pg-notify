@@ -113,7 +113,7 @@
 <span style="color: #000000">    },</span>
 <span style="color: #000000">    </span><span style="color: #008000">/**</span>
 <span style="color: #008000">     * - Optional parameter</span>
-<span style="color: #008000">     * - Overriding of the logger with own implementation</span>
+<span style="color: #008000">     * - Overrides default logger</span>
 <span style="color: #008000">     */</span>
 <span style="color: #000000">    </span><span style="color: #001080">logger:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Logger</span><span style="color: #000000">(),</span>
 <span style="color: #000000">  })</span>
@@ -122,7 +122,7 @@
 				<a href="#bind-message-handlers" id="bind-message-handlers" style="color: inherit; text-decoration: none;">
 					<h3>Bind message handlers</h3>
 				</a>
-				<p><code>NestJS PG Notify</code> offers two decorators to register messages handlers: <code>@PgNotifyEventPattern()</code> and <code>@PgNotifyMessagePattern()</code>.
+				<p><code>NestJS PG Notify</code> offers two decorators to register message handlers: <code>@PgNotifyEventPattern()</code> and <code>@PgNotifyMessagePattern()</code>.
 				These are an alternative to standard decorators: <code>@EventPattern()</code> and <code>@MessagePattern()</code>.</p>
 				<p>Message handler&#39;s binding can be used only within controller classes.</p>
 				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">PgNotifyContext</span><span style="color: #000000">, </span><span style="color: #001080">PgNotifyEventPattern</span><span style="color: #000000">, </span><span style="color: #001080">PgNotifyMessagePattern</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;nestjs-pg-notify&#039;</span><span style="color: #000000">;</span>
@@ -133,13 +133,13 @@
 <span style="color: #000000">  @</span><span style="color: #795E26">PgNotifyEventPattern</span><span style="color: #000000">({</span><span style="color: #001080">event:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;greeting&#039;</span><span style="color: #000000">})</span>
 <span style="color: #000000">  @</span><span style="color: #795E26">UsePipes</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ValidationPipe</span><span style="color: #000000">())</span>
 <span style="color: #000000">  </span><span style="color: #795E26">onGreetingEvent</span><span style="color: #000000">(@</span><span style="color: #795E26">Payload</span><span style="color: #000000">() </span><span style="color: #001080">payload</span><span style="color: #000000">: </span><span style="color: #267F99">any</span><span style="color: #000000">, @</span><span style="color: #795E26">Ctx</span><span style="color: #000000">() </span><span style="color: #001080">context</span><span style="color: #000000">: </span><span style="color: #267F99">PgNotifyContext</span><span style="color: #000000">): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">payload</span><span style="color: #000000">.</span><span style="color: #001080">message</span><span style="color: #000000">);</span>
+<span style="color: #000000">    </span><span style="color: #001080">Logger</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">payload</span><span style="color: #000000">.</span><span style="color: #001080">message</span><span style="color: #000000">);</span>
 <span style="color: #000000">  }</span>
 
 <span style="color: #000000">  @</span><span style="color: #795E26">PgNotifyMessagePattern</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;greeting&#039;</span><span style="color: #000000">)</span>
 <span style="color: #000000">  @</span><span style="color: #795E26">UsePipes</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">ValidationPipe</span><span style="color: #000000">())</span>
 <span style="color: #000000">  </span><span style="color: #795E26">onGreetingRequest</span><span style="color: #000000">(@</span><span style="color: #795E26">Payload</span><span style="color: #000000">() </span><span style="color: #001080">payload</span><span style="color: #000000">: </span><span style="color: #267F99">any</span><span style="color: #000000">, @</span><span style="color: #795E26">Ctx</span><span style="color: #000000">() </span><span style="color: #001080">context</span><span style="color: #000000">: </span><span style="color: #267F99">PgNotifyContext</span><span style="color: #000000">): </span><span style="color: #267F99">string</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">payload</span><span style="color: #000000">.</span><span style="color: #001080">message</span><span style="color: #000000">);</span>
+<span style="color: #000000">     </span><span style="color: #001080">Logger</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">payload</span><span style="color: #000000">.</span><span style="color: #001080">message</span><span style="color: #000000">);</span>
 <span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;Hello!&#039;</span><span style="color: #000000">;</span>
 <span style="color: #000000">  }</span>
 
@@ -185,17 +185,17 @@
 <span style="color: #000000">    @</span><span style="color: #795E26">Inject</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;PG_NOTIFY_CLIENT&#039;</span><span style="color: #000000">)</span>
 <span style="color: #000000">    </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #0000FF">readonly</span><span style="color: #000000"> </span><span style="color: #001080">client</span><span style="color: #000000">: </span><span style="color: #267F99">ClientProxy</span><span style="color: #000000">,</span>
 <span style="color: #000000">  ) {}</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">// Sends request and expects response</span>
+<span style="color: #000000">   </span>
 <span style="color: #000000">  </span><span style="color: #795E26">sendRequest</span><span style="color: #000000">(): </span><span style="color: #267F99">Observable</span><span style="color: #000000">&lt;</span><span style="color: #267F99">PgNotifyResponse</span><span style="color: #000000">&gt; {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Send request and expect response</span>
 <span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">client</span><span style="color: #000000">.</span><span style="color: #795E26">send</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;greeting&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">message:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;Hello!&#039;</span><span style="color: #000000">}).</span><span style="color: #795E26">pipe</span><span style="color: #000000">(</span>
 <span style="color: #000000">      </span><span style="color: #795E26">timeout</span><span style="color: #000000">(</span><span style="color: #098658">2_000</span><span style="color: #000000">),</span>
 <span style="color: #000000">      </span><span style="color: #795E26">tap</span><span style="color: #000000">(</span><span style="color: #001080">response</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">Logger</span><span style="color: #000000">.</span><span style="color: #795E26">debug</span><span style="color: #000000">(</span><span style="color: #001080">response</span><span style="color: #000000">)),</span>
 <span style="color: #000000">    );</span>
 <span style="color: #000000">  }</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">// Emits event</span>
+<span style="color: #000000">  </span>
 <span style="color: #000000">  </span><span style="color: #795E26">emitEvent</span><span style="color: #000000">(): </span><span style="color: #267F99">Observable</span><span style="color: #000000">&lt;</span><span style="color: #267F99">void</span><span style="color: #000000">&gt; {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Emit event</span>
 <span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">client</span><span style="color: #000000">.</span><span style="color: #795E26">emit</span><span style="color: #000000">({</span><span style="color: #001080">event:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;greeting&#039;</span><span style="color: #000000">}, {</span><span style="color: #001080">message:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;Hello!&#039;</span><span style="color: #000000">});</span>
 <span style="color: #000000">  }</span>
 <span style="color: #000000">}</span>
