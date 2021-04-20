@@ -2,8 +2,17 @@ import { LoggerService } from '@nestjs/common';
 import { ConnectionConfig } from 'pg';
 
 export type PgNotifyOptions = {
+  /**
+   * Corresponds to the "pg" library's connection config
+   */
   connection: ConnectionConfig,
+  /**
+   * Contains retry-strategy config passing the data to the "pg-listen" library
+   */
   strategy?: PgNotifyConnectionStrategy,
+  /**
+   * Overrides default logger
+   */
   logger?: LoggerService,
 };
 
