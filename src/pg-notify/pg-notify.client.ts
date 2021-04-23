@@ -175,5 +175,4 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
 
     return response;
   }
-
 }
