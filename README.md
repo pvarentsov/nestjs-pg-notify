@@ -4,6 +4,8 @@ NestJS custom transport strategy for PostgreSQL Pub/Sub.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](./LICENSE)
 ![](https://img.shields.io/npm/v/nestjs-pg-notify.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pvarentsov_nestjs-pg-notify&metric=alert_status)](https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=pvarentsov_nestjs-pg-notify&metric=coverage)](https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify)
 
 ## PostgreSQL async notifications
 
