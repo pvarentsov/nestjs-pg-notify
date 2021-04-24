@@ -1,5 +1,5 @@
 export const isObject = (value: unknown): value is Record<string, any> => {
-  return value !== null && typeof value === 'object';
+  return value !== null && !Array.isArray(value) && typeof value === 'object';
 };
 
 export const getReplyPattern = (pattern: string): string => {

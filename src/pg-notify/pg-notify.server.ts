@@ -189,5 +189,4 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     }
     return PgNotifyResponse.success(data);
   }
-
 }

@@ -1,11 +1,11 @@
-import { Logger, LoggerService, OnApplicationBootstrap } from '@nestjs/common';
+import { Logger, LoggerService, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common';
 import { ClientProxy, ReadPacket, WritePacket } from '@nestjs/microservices';
 import createSubscriber, { PgParsedNotification, Subscriber as Publisher } from 'pg-listen';
 import { PgNotifyResponse } from './pg-notify.response';
 import { PgNotifyOptions } from './pg-notify.type';
 import { getReplyPattern, isObject } from './pg-notify.util';
 
-export class PgNotifyClient extends ClientProxy implements OnApplicationBootstrap {
+export class PgNotifyClient extends ClientProxy implements OnApplicationBootstrap, OnApplicationShutdown {
   private readonly publisher: Publisher;
   private readonly loggerService: LoggerService;
   private readonly subscriptionsCount: Map<string, number> = new Map();
@@ -25,6 +25,10 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
 
   public async onApplicationBootstrap(): Promise<void> {
     await this.connectOnBootstrap();
+  }
+
+  public async onApplicationShutdown(): Promise<void> {
+    await this.close();
   }
 
   public async connectOnBootstrap(): Promise<void> {
@@ -175,5 +179,4 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
 
     return response;
   }
-
 }
