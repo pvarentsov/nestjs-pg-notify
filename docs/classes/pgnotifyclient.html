@@ -82,6 +82,7 @@
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
 					<li><span class="tsd-signature-type">OnApplicationBootstrap</span></li>
+					<li><span class="tsd-signature-type">OnApplicationShutdown</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -128,6 +129,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="pgnotifyclient.html#initializeserializer" class="tsd-kind-icon">initialize<wbr>Serializer</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="pgnotifyclient.html#normalizepattern" class="tsd-kind-icon">normalize<wbr>Pattern</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="pgnotifyclient.html#onapplicationbootstrap" class="tsd-kind-icon">on<wbr>Application<wbr>Bootstrap</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="pgnotifyclient.html#onapplicationshutdown" class="tsd-kind-icon">on<wbr>Application<wbr>Shutdown</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="pgnotifyclient.html#publish" class="tsd-kind-icon">publish</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-external"><a href="pgnotifyclient.html#send" class="tsd-kind-icon">send</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="pgnotifyclient.html#serializeerror" class="tsd-kind-icon">serialize<wbr>Error</a></li>
@@ -151,7 +153,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides ClientProxy.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L14">src/pg-notify/pg-notify.client.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L14">src/pg-notify/pg-notify.client.ts:14</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -173,7 +175,7 @@
 					<div class="tsd-signature tsd-kind-icon">connected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L14">src/pg-notify/pg-notify.client.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L14">src/pg-notify/pg-notify.client.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -194,7 +196,7 @@
 					<div class="tsd-signature tsd-kind-icon">first<wbr>Connected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L13">src/pg-notify/pg-notify.client.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L13">src/pg-notify/pg-notify.client.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -204,7 +206,7 @@
 					<div class="tsd-signature tsd-kind-icon">logger<wbr>Service<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">LoggerService</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L10">src/pg-notify/pg-notify.client.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L10">src/pg-notify/pg-notify.client.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -214,7 +216,7 @@
 					<div class="tsd-signature tsd-kind-icon">publisher<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Subscriber</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L9">src/pg-notify/pg-notify.client.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L9">src/pg-notify/pg-notify.client.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -246,7 +248,7 @@
 					<div class="tsd-signature tsd-kind-icon">subscriptions<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L11">src/pg-notify/pg-notify.client.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L11">src/pg-notify/pg-notify.client.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -287,7 +289,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L117">src/pg-notify/pg-notify.client.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L121">src/pg-notify/pg-notify.client.ts:121</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -310,7 +312,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L113">src/pg-notify/pg-notify.client.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L117">src/pg-notify/pg-notify.client.ts:117</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -328,7 +330,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides ClientProxy.close</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L49">src/pg-notify/pg-notify.client.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L53">src/pg-notify/pg-notify.client.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -346,7 +348,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides ClientProxy.connect</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L43">src/pg-notify/pg-notify.client.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L47">src/pg-notify/pg-notify.client.ts:47</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -393,7 +395,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L30">src/pg-notify/pg-notify.client.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L34">src/pg-notify/pg-notify.client.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -410,7 +412,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L101">src/pg-notify/pg-notify.client.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L105">src/pg-notify/pg-notify.client.ts:105</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -481,7 +483,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L142">src/pg-notify/pg-notify.client.ts:142</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L146">src/pg-notify/pg-notify.client.ts:146</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>notification<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PgParsedNotification</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
@@ -517,7 +519,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides ClientProxy.dispatchEvent</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L59">src/pg-notify/pg-notify.client.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L63">src/pg-notify/pg-notify.client.ts:63</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -615,7 +617,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L171">src/pg-notify/pg-notify.client.ts:171</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L175">src/pg-notify/pg-notify.client.ts:175</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -711,7 +713,25 @@
 							<aside class="tsd-sources">
 								<p>Implementation of OnApplicationBootstrap.onApplicationBootstrap</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L26">src/pg-notify/pg-notify.client.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L26">src/pg-notify/pg-notify.client.ts:26</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="onapplicationshutdown" class="tsd-anchor"></a>
+					<h3>on<wbr>Application<wbr>Shutdown</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Application<wbr>Shutdown<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of OnApplicationShutdown.onApplicationShutdown</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L30">src/pg-notify/pg-notify.client.ts:30</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -729,7 +749,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides ClientProxy.publish</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L64">src/pg-notify/pg-notify.client.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L68">src/pg-notify/pg-notify.client.ts:68</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -857,7 +877,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/b64bc55/src/pg-notify/pg-notify.client.ts#L160">src/pg-notify/pg-notify.client.ts:160</a></li>
+									<li>Defined in <a href="https://github.com/pvarentsov/nestjs-pg-notify/blob/2be1251/src/pg-notify/pg-notify.client.ts#L164">src/pg-notify/pg-notify.client.ts:164</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -967,6 +987,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="pgnotifyclient.html#onapplicationbootstrap" class="tsd-kind-icon">on<wbr>Application<wbr>Bootstrap</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="pgnotifyclient.html#onapplicationshutdown" class="tsd-kind-icon">on<wbr>Application<wbr>Shutdown</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="pgnotifyclient.html#publish" class="tsd-kind-icon">publish</a>
