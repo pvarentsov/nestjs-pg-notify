@@ -42,7 +42,7 @@ describe('E2E: Success', () => {
     expect(body.status).toEqual(200);
 
     expect(body.data).toEqual(expect.objectContaining({
-      sentPayload: {message: 'hello'},
+      payload: {message: 'hello'},
       response: 'Request: Ok'
     }));
 

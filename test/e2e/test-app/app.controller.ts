@@ -29,7 +29,7 @@ export class AppController {
   @PgNotifyMessagePattern({event: 'event'})
   onMessagePattern(@Payload() payload: any, @Ctx() context: PgNotifyContext): Record<string, any> {
     return {
-      sentPayload: payload,
+      payload: payload,
       context: context,
       response: 'Request: Ok'
     };
