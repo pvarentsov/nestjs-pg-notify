@@ -7,13 +7,22 @@ import { AppToken } from './app.token';
 @Controller()
 export class AppController {
 
+  private readonly onEventPatternCalls: Map<string, {payload: any, context: PgNotifyContext}>;
+
   constructor(
     @Inject(AppToken.PgNotifyClient)
     private readonly client: ClientProxy,
-  ) {}
+  ) {
+    this.onEventPatternCalls = new Map();
+  }
 
   @PgNotifyEventPattern('event')
-  onEventPattern(): string {
+  onEventPattern(@Payload() data: any, @Ctx() context: PgNotifyContext): string {
+    this.onEventPatternCalls.set(data.eventId, {
+      payload: data.payload,
+      context: context,
+    });
+
     return 'Event: Ok';
   }
 
@@ -31,9 +40,12 @@ export class AppController {
     return this.client.send({event: 'event'}, body);
   }
 
-  @Post('user')
-  emitEvent(): Observable<void> {
-    return this.client.emit('event', 'hello');
+  @Post('emit-event')
+  emitEvent(@Body() body: any): Observable<void> {
+    return this.client.emit('event', body);
   }
 
+  getOnEventPatternCall(id: string): {payload: any, context: PgNotifyContext}|undefined {
+    return this.onEventPatternCalls.get(id);
+  }
 }
