@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { PgNotifyClient } from '../../../src';
+import { AppConfig } from './app.config';
 import { AppController } from './app.controller';
 import { AppToken } from './app.token';
 
@@ -11,19 +12,7 @@ import { AppToken } from './app.token';
   providers: [
     {
       provide: AppToken.PgNotifyClient,
-      useFactory: (): ClientProxy => new PgNotifyClient({
-        connection: {
-          host: 'localhost',
-          port: 5432,
-          database: 'pgnotify',
-          user: 'pgnotify',
-          password: 'pgnotify',
-        },
-        strategy: {
-          retryInterval: 10_000,
-          retryTimeout: Number.POSITIVE_INFINITY,
-        },
-      })
+      useFactory: (): ClientProxy => new PgNotifyClient(AppConfig.validOptions)
     },
   ],
   exports: [
