@@ -248,3 +248,7 @@ API documentation is available [here](https://pvarentsov.github.io/nestjs-pg-not
    * [Custom transporters](https://docs.nestjs.com/microservices/custom-transport)
 4. Dependencies:
    * [pg-listen](https://github.com/andywer/pg-listen)
+   
+## License
+
+NestJS PG Notify is [MIT licensed](https://github.com/pvarentsov/nestjs-pg-notify/blob/main/LICENSE).
