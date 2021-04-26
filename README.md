@@ -87,7 +87,7 @@ export class AppController {
   @PgNotifyMessagePattern('greeting')
   @UsePipes(new ValidationPipe())
   onGreetingRequest(@Payload() payload: any, @Ctx() context: PgNotifyContext): string {
-     Logger.log(payload.message);
+    Logger.log(payload.message);
     return 'Hello!';
   }
 
