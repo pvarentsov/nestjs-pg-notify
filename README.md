@@ -251,4 +251,4 @@ API documentation is available [here](https://pvarentsov.github.io/nestjs-pg-not
    
 ## License
 
-NestJS PG Notify is [MIT licensed](https://github.com/pvarentsov/nestjs-pg-notify/blob/main/LICENSE).
+This project is licensed under the [MIT License](https://github.com/pvarentsov/nestjs-pg-notify/blob/main/LICENSE).
