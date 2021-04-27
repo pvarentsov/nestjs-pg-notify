@@ -24,8 +24,8 @@ export class AppConfig {
       password: 'pgnotify',
     },
     strategy: {
-      retryInterval: 1_000,
-      retryTimeout: Number.POSITIVE_INFINITY
+      retryInterval: 0,
+      retryLimit: 2,
     }
   };
 }

@@ -1,6 +1,7 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ClientProxy, Ctx, Payload } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { PgNotifyContext, PgNotifyEventPattern, PgNotifyMessagePattern, PgNotifyResponse } from '../../../src';
 import { AppToken } from './app.token';
 
@@ -37,12 +38,16 @@ export class AppController {
 
   @Post('send-request')
   sendRequest(@Body() body: any): Observable<PgNotifyResponse> {
-    return this.client.send({event: 'event'}, body);
+    return this.client.send({event: 'event'}, body).pipe(
+      catchError(err => of({status: 500, error: err.message}))
+    );
   }
 
   @Post('emit-event')
-  emitEvent(@Body() body: any): Observable<void> {
-    return this.client.emit('event', body);
+  emitEvent(@Body() body: any): Observable<any> {
+    return this.client.emit('event', body).pipe(
+      catchError(err => of({status: 500, error: err.message}))
+    );
   }
 
   getOnEventPatternCall(id: string): {payload: any, context: PgNotifyContext}|undefined {
