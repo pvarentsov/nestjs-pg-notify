@@ -1,6 +1,6 @@
 {
   "name": "nestjs-pg-notify",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "NestJS custom transport strategy for PostgreSQL PubSub",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
