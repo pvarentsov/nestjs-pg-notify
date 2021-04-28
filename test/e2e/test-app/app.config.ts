@@ -1,3 +1,4 @@
+import { resolve } from 'path';
 import { PgNotifyOptions } from '../../../src';
 
 export class AppConfig {
@@ -10,7 +11,7 @@ export class AppConfig {
       password: 'pgnotify',
     },
     strategy: {
-      retryInterval: 1_000,
+      retryInterval: 100,
       retryTimeout: Number.POSITIVE_INFINITY
     }
   };
@@ -28,4 +29,6 @@ export class AppConfig {
       retryLimit: 2,
     }
   };
+
+  static readonly dockerComposePath: string = resolve(__dirname, '../../../', 'docker-compose.yaml');
 }
