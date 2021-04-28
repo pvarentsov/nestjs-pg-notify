@@ -1,7 +1,7 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ClientProxy, Ctx, Payload } from '@nestjs/microservices';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, timeout } from 'rxjs/operators';
 import { PgNotifyContext, PgNotifyEventPattern, PgNotifyMessagePattern, PgNotifyResponse } from '../../../src';
 import { AppToken } from './app.token';
 
@@ -39,6 +39,7 @@ export class AppController {
   @Post('send-request')
   sendRequest(@Body() body: any): Observable<PgNotifyResponse> {
     return this.client.send({event: 'event'}, body).pipe(
+      timeout(1_000),
       catchError(err => of({status: 500, error: err.message}))
     );
   }
@@ -46,6 +47,7 @@ export class AppController {
   @Post('emit-event')
   emitEvent(@Body() body: any): Observable<any> {
     return this.client.emit('event', body).pipe(
+      timeout(1_000),
       catchError(err => of({status: 500, error: err.message}))
     );
   }

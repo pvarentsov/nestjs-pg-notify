@@ -7,8 +7,8 @@ import { AppConfig } from './test-app/app.config';
 import { AppLogger } from './test-app/app.logger';
 import { AppModule } from './test-app/app.module';
 
-describe('E2E: Client (Error)', () => {
-  it('When client is not connected, expect it throws connection error on request sending', async () => {
+describe('E2E: Server (Error)', () => {
+  it('When server is not connected, expect it throws timeout error on request sending', async () => {
     const logger = new AppLogger();
     const app = await createApp(logger);
 
@@ -20,11 +20,11 @@ describe('E2E: Client (Error)', () => {
     await app.close();
 
     expect(body.status).toEqual(500);
-    expect(body.error).toEqual('Client is not connected');
+    expect(body.error).toEqual('Timeout has occurred');
     expect(logger.errorMessages).toEqual(expect.arrayContaining(['Connection refused. Retry attempt 1...']));
   });
 
-  it('When client is not connected, expect it throws connection error on event emitting', async () => {
+  it('When server is not connected, expect it does not throw any error on event emitting', async () => {
     const logger = new AppLogger();
     const app = await createApp(logger);
 
@@ -35,8 +35,7 @@ describe('E2E: Client (Error)', () => {
     const body = response.body;
     await app.close();
 
-    expect(body.status).toEqual(500);
-    expect(body.error).toEqual('Client is not connected');
+    expect(body).toEqual({});
     expect(logger.errorMessages).toEqual(expect.arrayContaining(['Connection refused. Retry attempt 1...']));
   });
 });
@@ -45,7 +44,7 @@ async function createApp(logger: LoggerService): Promise<INestApplication> {
   const module: TestingModule = await Test
     .createTestingModule({
       imports: [
-        AppModule.configure({client: {...AppConfig.invalidOptions, logger}})
+        AppModule.configure({client: AppConfig.validOptions})
       ]
     })
     .compile();
@@ -53,7 +52,7 @@ async function createApp(logger: LoggerService): Promise<INestApplication> {
   const app = module.createNestApplication();
 
   app.connectMicroservice<MicroserviceOptions>({
-    strategy: new PgNotifyServer(AppConfig.validOptions),
+    strategy: new PgNotifyServer({...AppConfig.invalidOptions, logger}),
   });
 
   await app.startAllMicroservicesAsync();

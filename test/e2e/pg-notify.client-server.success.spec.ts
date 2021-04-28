@@ -8,7 +8,7 @@ import { AppConfig } from './test-app/app.config';
 import { AppController } from './test-app/app.controller';
 import { AppModule } from './test-app/app.module';
 
-describe('E2E: Client-Server -> Success', () => {
+describe('E2E: Client-Server (Success)', () => {
   let app: INestApplication;
   let controller: AppController;
 

@@ -18,8 +18,8 @@
     "build:release": "tsc -p tsconfig.release.json",
     "release": "npm run build:release && npm publish",
     "typedoc": "typedoc src/index.ts && touch docs/.nojekyll",
-    "test": "jest --config jest.json",
-    "test:cov": "jest --config jest.json --coverage"
+    "test": "jest --config jest.json --runInBand",
+    "test:cov": "jest --config jest.json --runInBand --coverage"
   },
   "repository": {
     "type": "git",
