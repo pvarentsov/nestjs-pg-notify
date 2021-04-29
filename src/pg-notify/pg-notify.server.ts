@@ -2,8 +2,8 @@ import { Logger, LoggerService } from '@nestjs/common';
 import { CustomTransportStrategy, MessageHandler, Server } from '@nestjs/microservices';
 import { NO_EVENT_HANDLER, NO_MESSAGE_HANDLER } from '@nestjs/microservices/constants';
 import createSubscriber, { Subscriber } from 'pg-listen';
-import { of, Subscription } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { of, Subscription, ConnectableObservable } from 'rxjs';
+import { catchError, map, publish } from 'rxjs/operators';
 import { PG_NOTIFY_TRANSPORT } from './pg-notify.constant';
 import { PgNotifyContext } from './pg-notify.context';
 import { PgNotifyResponse } from './pg-notify.response';
@@ -125,7 +125,11 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
 
     try {
       const resolvedHandler = await handler(data, ctx);
-      this.transformToObservable(resolvedHandler).subscribe();
+      const stream = this
+        .transformToObservable(resolvedHandler)
+        .pipe(publish()) as ConnectableObservable<any>;
+
+      stream.connect();
     }
     catch (err) {
       return this.loggerService.error(parseErrorMessage(err), undefined, PgNotifyServer.name);
