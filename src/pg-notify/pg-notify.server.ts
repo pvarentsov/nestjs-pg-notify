@@ -2,7 +2,7 @@ import { Logger, LoggerService } from '@nestjs/common';
 import { CustomTransportStrategy, MessageHandler, Server } from '@nestjs/microservices';
 import { NO_EVENT_HANDLER, NO_MESSAGE_HANDLER } from '@nestjs/microservices/constants';
 import createSubscriber, { Subscriber } from 'pg-listen';
-import { of, Subscription, ConnectableObservable } from 'rxjs';
+import { ConnectableObservable, of, Subscription } from 'rxjs';
 import { catchError, map, publish } from 'rxjs/operators';
 import { PG_NOTIFY_TRANSPORT } from './pg-notify.constant';
 import { PgNotifyContext } from './pg-notify.context';
@@ -138,11 +138,11 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
 
   private async handleAsRequest(channel: string, id: string, data: any, ctx: PgNotifyContext): Promise<Subscription> {
     const handler = this.getHandlerByPattern(channel);
-    const publish = this.getPublisher(channel, id);
+    const publisher = this.getPublisher(channel, id);
 
     if (!handler) {
       const response$ = of(PgNotifyResponse.error(NO_MESSAGE_HANDLER, 404));
-      return this.send(response$, publish);
+      return this.send(response$, publisher);
     }
 
     try {
@@ -152,11 +152,11 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
         catchError(err => of(PgNotifyResponse.error(parseErrorMessage(err))))
       );
 
-      return this.send(response$, publish);
+      return this.send(response$, publisher);
     }
     catch (err) {
       const response$ = of(PgNotifyResponse.error(parseErrorMessage(err)));
-      return this.send(response$, publish);
+      return this.send(response$, publisher);
     }
   }
 
