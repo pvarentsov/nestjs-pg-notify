@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
-import { ClientProxy, Ctx, Payload } from '@nestjs/microservices';
+import { ClientProxy, Ctx, MessagePattern, Payload } from '@nestjs/microservices';
 import { Observable, of } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 import { PgNotifyContext, PgNotifyEventPattern, PgNotifyMessagePattern, PgNotifyResponse } from '../../../src';
@@ -15,6 +15,11 @@ export class AppController {
     private readonly client: ClientProxy,
   ) {
     this.onEventPatternCalls = new Map();
+  }
+
+  @MessagePattern({event: 'event'})
+  onFakeMessagePattern(): null {
+    return null;
   }
 
   @PgNotifyEventPattern('event')

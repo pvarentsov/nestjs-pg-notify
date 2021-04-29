@@ -8,7 +8,7 @@ import { AppConfig } from './test-app/app.config';
 import { AppController } from './test-app/app.controller';
 import { AppModule } from './test-app/app.module';
 
-describe('E2E: Client-Server (Success)', () => {
+describe('E2E: Client-Server communication', () => {
   let app: INestApplication;
   let controller: AppController;
 
@@ -36,7 +36,7 @@ describe('E2E: Client-Server (Success)', () => {
     await app.close();
   });
 
-  it('Expect it sends request and receives response', async () => {
+  it('Expect client sends request and receives response', async () => {
     const response = await supertest(app.getHttpServer())
       .post('/send-request')
       .send({message: 'hello'});
@@ -56,7 +56,7 @@ describe('E2E: Client-Server (Success)', () => {
     expect(body.data.context.data).toEqual({message: 'hello'});
   });
 
-  it('Expect it emits event and does not await response', async () => {
+  it('Expect client emits event and does not await response', async () => {
     const eventId = v4();
     const payload = 'Hello!';
 

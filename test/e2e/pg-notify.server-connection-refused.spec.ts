@@ -7,8 +7,8 @@ import { AppConfig } from './test-app/app.config';
 import { AppLogger } from './test-app/app.logger';
 import { AppModule } from './test-app/app.module';
 
-describe('E2E: Server Connection (Error)', () => {
-  it('When server is not connected, expect it throws timeout error on request sending', async () => {
+describe('E2E: Server connection refused', () => {
+  it('When server is not connected, expect client throws timeout error on request sending', async () => {
     const serverLogger = new AppLogger();
     const app = await createApp(serverLogger);
 
@@ -24,7 +24,7 @@ describe('E2E: Server Connection (Error)', () => {
     expect(serverLogger.errorMessages).toEqual(expect.arrayContaining(['Connection refused. Retry attempt 1...']));
   });
 
-  it('When server is not connected, expect it does not throw any error on event emitting', async () => {
+  it('When server is not connected, expect client does not throw any error on event emitting', async () => {
     const serverLogger = new AppLogger();
     const app = await createApp(serverLogger);
 
