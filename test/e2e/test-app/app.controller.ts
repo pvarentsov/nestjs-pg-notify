@@ -41,9 +41,26 @@ export class AppController {
     };
   }
 
+  @PgNotifyMessagePattern('event-with-unified-response')
+  onMessagePatternWithUnifiedResponse(@Payload() payload: any, @Ctx() context: PgNotifyContext): Record<string, any> {
+    return PgNotifyResponse.success({
+      payload: payload,
+      context: context,
+      response: 'Request: Ok'
+    });
+  }
+
   @Post('send-request')
   sendRequest(@Body() body: any): Observable<PgNotifyResponse> {
     return this.client.send({event: 'event'}, body).pipe(
+      timeout(1_000),
+      catchError(err => of({status: 500, error: err.message}))
+    );
+  }
+
+  @Post('send-request-with-unified-response')
+  sendRequestWithUnifiedResponse(@Body() body: any): Observable<PgNotifyResponse> {
+    return this.client.send('event-with-unified-response', body).pipe(
       timeout(1_000),
       catchError(err => of({status: 500, error: err.message}))
     );

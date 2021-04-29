@@ -8,7 +8,7 @@ import { AppLogger } from './test-app/app.logger';
 import { AppModule } from './test-app/app.module';
 import { AppUtil } from './test-app/app.util';
 
-describe('E2E: Client-Server Reconnection', () => {
+describe('E2E: Client-Server reconnection', () => {
 
   afterAll(async () => AppUtil.dockerComposeStart());
 
@@ -52,7 +52,7 @@ describe('E2E: Client-Server Reconnection', () => {
     await AppUtil.delay(1000);
 
     const response = await supertest(app.getHttpServer())
-      .post('/send-request')
+      .post('/send-request-with-unified-response')
       .send('42');
 
     await app.close();
