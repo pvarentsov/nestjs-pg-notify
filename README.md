@@ -231,7 +231,7 @@ API documentation is available [here](https://pvarentsov.github.io/nestjs-pg-not
 **Version 1.0.0**
 - [x] Detailed README
 - [x] Usage examples
-- [ ] Tests & coverage
+- [x] Tests & coverage
 - [ ] GitHub actions
 
 ## References
