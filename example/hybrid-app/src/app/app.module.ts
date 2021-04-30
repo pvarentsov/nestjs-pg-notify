@@ -20,8 +20,8 @@ import { AppToken } from './app.token';
           password: 'pgnotify',
         },
         strategy: {
-          retryInterval: 10_000,
-          retryTimeout: Number.POSITIVE_INFINITY,
+          retryInterval: 1_000,
+          retryTimeout: Infinity,
         },
       })
     },
