@@ -54,7 +54,7 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
      */
     strategy: {
       retryInterval: 1_000,
-      retryTimeout: Number.POSITIVE_INFINITY,
+      retryTimeout: Infinity,
     },
     /**
      * - Optional parameter
@@ -117,7 +117,7 @@ import { PgNotifyClient } from 'nestjs-pg-notify';
         },
         strategy: {
           retryInterval: 1_000,
-          retryTimeout: Number.POSITIVE_INFINITY,
+          retryTimeout: Infinity,
         }, 
       })
     },
