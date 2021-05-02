@@ -38,8 +38,8 @@ import { PgNotifyServer } from 'nestjs-pg-notify';
 const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
   strategy: new PgNotifyServer({
     /**
-     * - Required parameter
-     * - Corresponds to the "pg" library's connection config
+     * Required parameter
+     * Corresponds to the "pg" library's connection config
      */  
     connection: {
       host: 'localhost',
@@ -49,16 +49,16 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
       password: 'pgnotify',
     },
     /**
-     * - Optional parameter
-     * - Contains retry-strategy config passing the data to the "pg-listen" library
+     * Optional parameter
+     * Contains retry-strategy config passing the data to the "pg-listen" library
      */
     strategy: {
       retryInterval: 1_000,
       retryTimeout: Infinity,
     },
     /**
-     * - Optional parameter
-     * - Overrides default logger
+     * Optional parameter
+     * Overrides default logger
      */
     logger: new Logger(),
   })
