@@ -62,7 +62,7 @@
 					<h1>NestJS PG Notify</h1>
 				</a>
 				<p>NestJS custom transport strategy for PostgreSQL Pub/Sub.</p>
-				<p><a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg" alt="License: MIT"></a>
+				<p><a href="./LICENSE"><img src="https://img.shields.io/github/license/pvarentsov/nestjs-pg-notify" alt="License: MIT"></a>
 					<img src="https://img.shields.io/npm/v/nestjs-pg-notify.svg" alt="">
 					<a href="https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify"><img src="https://sonarcloud.io/api/project_badges/measure?project=pvarentsov_nestjs-pg-notify&metric=alert_status" alt="Quality Gate Status"></a>
 				<a href="https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify"><img src="https://sonarcloud.io/api/project_badges/measure?project=pvarentsov_nestjs-pg-notify&metric=coverage" alt="Coverage"></a></p>
@@ -95,8 +95,8 @@
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">app</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">NestFactory</span><span style="color: #000000">.</span><span style="color: #795E26">createMicroservice</span><span style="color: #000000">&lt;</span><span style="color: #267F99">MicroserviceOptions</span><span style="color: #000000">&gt;(</span><span style="color: #001080">AppModule</span><span style="color: #000000">, {</span>
 <span style="color: #000000">  </span><span style="color: #001080">strategy:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">PgNotifyServer</span><span style="color: #000000">({</span>
 <span style="color: #000000">    </span><span style="color: #008000">/**</span>
-<span style="color: #008000">     * - Required parameter</span>
-<span style="color: #008000">     * - Corresponds to the &quot;pg&quot; library&#039;s connection config</span>
+<span style="color: #008000">     * Required parameter</span>
+<span style="color: #008000">     * Corresponds to the &quot;pg&quot; library&#039;s connection config</span>
 <span style="color: #008000">     */</span><span style="color: #000000">  </span>
 <span style="color: #000000">    </span><span style="color: #001080">connection:</span><span style="color: #000000"> {</span>
 <span style="color: #000000">      </span><span style="color: #001080">host:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;localhost&#039;</span><span style="color: #000000">,</span>
@@ -106,16 +106,16 @@
 <span style="color: #000000">      </span><span style="color: #001080">password:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;pgnotify&#039;</span><span style="color: #000000">,</span>
 <span style="color: #000000">    },</span>
 <span style="color: #000000">    </span><span style="color: #008000">/**</span>
-<span style="color: #008000">     * - Optional parameter</span>
-<span style="color: #008000">     * - Contains retry-strategy config passing the data to the &quot;pg-listen&quot; library</span>
+<span style="color: #008000">     * Optional parameter</span>
+<span style="color: #008000">     * Contains retry-strategy config passing the data to the &quot;pg-listen&quot; library</span>
 <span style="color: #008000">     */</span>
 <span style="color: #000000">    </span><span style="color: #001080">strategy:</span><span style="color: #000000"> {</span>
 <span style="color: #000000">      </span><span style="color: #001080">retryInterval:</span><span style="color: #000000"> </span><span style="color: #098658">1_000</span><span style="color: #000000">,</span>
-<span style="color: #000000">      </span><span style="color: #001080">retryTimeout:</span><span style="color: #000000"> </span><span style="color: #267F99">Number</span><span style="color: #000000">.POSITIVE_INFINITY,</span>
+<span style="color: #000000">      </span><span style="color: #001080">retryTimeout:</span><span style="color: #000000"> </span><span style="color: #0000FF">Infinity</span><span style="color: #000000">,</span>
 <span style="color: #000000">    },</span>
 <span style="color: #000000">    </span><span style="color: #008000">/**</span>
-<span style="color: #008000">     * - Optional parameter</span>
-<span style="color: #008000">     * - Overrides default logger</span>
+<span style="color: #008000">     * Optional parameter</span>
+<span style="color: #008000">     * Overrides default logger</span>
 <span style="color: #008000">     */</span>
 <span style="color: #000000">    </span><span style="color: #001080">logger:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Logger</span><span style="color: #000000">(),</span>
 <span style="color: #000000">  })</span>
@@ -168,7 +168,7 @@
 <span style="color: #000000">        },</span>
 <span style="color: #000000">        </span><span style="color: #001080">strategy:</span><span style="color: #000000"> {</span>
 <span style="color: #000000">          </span><span style="color: #001080">retryInterval:</span><span style="color: #000000"> </span><span style="color: #098658">1_000</span><span style="color: #000000">,</span>
-<span style="color: #000000">          </span><span style="color: #001080">retryTimeout:</span><span style="color: #000000"> </span><span style="color: #267F99">Number</span><span style="color: #000000">.POSITIVE_INFINITY,</span>
+<span style="color: #000000">          </span><span style="color: #001080">retryTimeout:</span><span style="color: #000000"> </span><span style="color: #0000FF">Infinity</span><span style="color: #000000">,</span>
 <span style="color: #000000">        }, </span>
 <span style="color: #000000">      })</span>
 <span style="color: #000000">    },</span>
@@ -271,7 +271,7 @@
 					<li><input checked="" disabled="" type="checkbox"> Detailed README</li>
 					<li><input checked="" disabled="" type="checkbox"> Usage examples</li>
 					<li><input checked="" disabled="" type="checkbox"> Tests &amp; coverage</li>
-					<li><input disabled="" type="checkbox"> GitHub actions</li>
+					<li><input checked="" disabled="" type="checkbox"> GitHub actions</li>
 				</ul>
 				<a href="#references" id="references" style="color: inherit; text-decoration: none;">
 					<h2>References</h2>
