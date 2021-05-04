@@ -232,7 +232,7 @@ API documentation is available [here](https://pvarentsov.github.io/nestjs-pg-not
 - [x] Detailed README
 - [x] Usage examples
 - [x] Tests & coverage
-- [ ] GitHub actions
+- [x] GitHub actions
 
 ## References
 
