@@ -3,9 +3,10 @@
 NestJS custom transport strategy for PostgreSQL Pub/Sub.
 
 [![License: MIT](https://img.shields.io/github/license/pvarentsov/nestjs-pg-notify)](./LICENSE)
-![](https://img.shields.io/npm/v/nestjs-pg-notify.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pvarentsov_nestjs-pg-notify&metric=alert_status)](https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=pvarentsov_nestjs-pg-notify&metric=coverage)](https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify)
+![NPM Version](https://img.shields.io/npm/v/nestjs-pg-notify.svg)
+![CI Status](https://img.shields.io/github/workflow/status/pvarentsov/nestjs-pg-notify/Release)
+![Quality Gate Status](https://img.shields.io/sonar/quality_gate/pvarentsov_nestjs-pg-notify?server=https%3A%2F%2Fsonarcloud.io)
+![Coverage](https://img.shields.io/sonar/coverage/pvarentsov_nestjs-pg-notify?server=https%3A%2F%2Fsonarcloud.io)
 
 ## PostgreSQL async notifications
 
@@ -225,14 +226,6 @@ export class AppController {
 ## API
 
 API documentation is available [here](https://pvarentsov.github.io/nestjs-pg-notify).
-
-## Roadmap
-
-**Version 1.0.0**
-- [x] Detailed README
-- [x] Usage examples
-- [x] Tests & coverage
-- [x] GitHub actions
 
 ## References
 
