@@ -3,8 +3,8 @@
 NestJS custom transport strategy for PostgreSQL Pub/Sub.
 
 [![License: MIT](https://img.shields.io/github/license/pvarentsov/nestjs-pg-notify)](./LICENSE)
-![NPM Version](https://img.shields.io/npm/v/nestjs-pg-notify.svg)
-![CI Status](https://img.shields.io/github/workflow/status/pvarentsov/nestjs-pg-notify/Release)
+[![NPM Version](https://img.shields.io/npm/v/nestjs-pg-notify.svg)](https://www.npmjs.com/package/nestjs-pg-notify)
+[![CI Status](https://img.shields.io/github/workflow/status/pvarentsov/nestjs-pg-notify/Release)](https://github.com/pvarentsov/nestjs-pg-notify/actions/workflows/release.yaml)
 [![Quality Gate Status](https://img.shields.io/sonar/quality_gate/pvarentsov_nestjs-pg-notify?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify)
 [![Coverage](https://img.shields.io/sonar/coverage/pvarentsov_nestjs-pg-notify?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify)
 
