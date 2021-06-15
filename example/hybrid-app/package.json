@@ -23,7 +23,7 @@
     "class-transformer": "0.4.0",
     "class-validator": "0.13.1",
     "eslint": "7.28.0",
-    "nestjs-pg-notify": "1.0.3",
+    "nestjs-pg-notify": "1.0.4",
     "pg": "8.6.0",
     "rxjs": "7.1.0"
   }
