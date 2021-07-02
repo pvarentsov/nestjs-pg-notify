@@ -26,7 +26,7 @@ NestJS applications. The [example](./example) folder contains examples for both 
 ## Installation
 
 ```bash
-$ npm i nestjs-pg-notify
+$ npm i nestjs-pg-notify pg
 ```
 
 ## Usage
