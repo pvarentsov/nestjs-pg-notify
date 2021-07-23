@@ -65,7 +65,7 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
     await this.publisher.notify(pattern, packet.data);
   }
 
-  public publish(partialPacket: ReadPacket, callback: (packet: WritePacket) => any): Function {
+  public publish(partialPacket: ReadPacket, callback: (packet: WritePacket) => any): () => any {
     try {
       const packet = this.assignPacketId(partialPacket);
       const pattern = this.normalizePattern(partialPacket.pattern);
