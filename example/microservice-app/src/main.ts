@@ -20,5 +20,5 @@ import { AppModule } from './app/app.module';
     })
   });
 
-  await app.listenAsync();
+  await app.listen();
 })();

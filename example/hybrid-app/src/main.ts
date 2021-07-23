@@ -22,6 +22,6 @@ import { AppModule } from './app/app.module';
     })
   });
 
-  await app.startAllMicroservicesAsync();
+  await app.startAllMicroservices();
   await app.listen(3005);
 })();
