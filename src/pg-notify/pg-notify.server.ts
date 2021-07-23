@@ -117,7 +117,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
   }
 
   private async handleAsEvent(channel: string, data: any, ctx: PgNotifyContext): Promise<void> {
-    const handler = this.getHandlerByPattern(channel);
+    const handler = this.getHandler(channel);
 
     if (!handler) {
       return this.loggerService.error(`${NO_EVENT_HANDLER} Event pattern: ${channel}.`, undefined, PgNotifyServer.name);
@@ -137,7 +137,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
   }
 
   private async handleAsRequest(channel: string, id: string, data: any, ctx: PgNotifyContext): Promise<Subscription> {
-    const handler = this.getHandlerByPattern(channel);
+    const handler = this.getHandler(channel);
     const publisher = this.getPublisher(channel, id);
 
     if (!handler) {
@@ -165,6 +165,22 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
       Object.assign(response, { id });
       await this.subscriber.notify(getReplyPattern(pattern), JSON.stringify(response));
     };
+  }
+
+  private getHandler(channel: string): MessageHandler | null {
+    let handler = this.getHandlerByPattern(channel);
+
+    if (!handler) {
+      try {
+        const parsedChannel = JSON.parse(channel);
+        const normalizedChannel = this.normalizePattern(parsedChannel);
+
+        handler = this.getHandlerByPattern(normalizedChannel);
+      }
+      catch (err) {}
+    }
+
+    return handler || null;
   }
 
   private parsePayload(payload: any): {id?: string, data: any} {
