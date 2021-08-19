@@ -18,12 +18,12 @@
     "@nestjs/core": "8.0.6",
     "@nestjs/microservices": "8.0.6",
     "@nestjs/platform-express": "8.0.6",
-    "@typescript-eslint/eslint-plugin": "4.29.1",
-    "@typescript-eslint/parser": "4.29.1",
+    "@typescript-eslint/eslint-plugin": "4.29.2",
+    "@typescript-eslint/parser": "4.29.2",
     "class-transformer": "0.4.0",
     "class-validator": "0.13.1",
     "eslint": "7.32.0",
-    "nestjs-pg-notify": "1.0.9",
+    "nestjs-pg-notify": "1.0.10",
     "pg": "8.7.1",
     "rxjs": "7.3.0"
   }
