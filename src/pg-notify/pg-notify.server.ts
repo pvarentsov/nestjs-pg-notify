@@ -35,7 +35,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
     }
     catch (err) {
       this.firstConnected = false;
-      this.subscriber.events.emit('error', err);
+      this.subscriber.events.emit('error', err as Error);
     }
     finally {
       callback();
@@ -48,7 +48,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
       await this.subscriber.close();
     }
     catch (err) {
-      this.subscriber.events.emit('error', err);
+      this.subscriber.events.emit('error', err as Error);
     }
   }
 
@@ -98,7 +98,7 @@ export class PgNotifyServer extends Server implements CustomTransportStrategy {
           this.firstConnected = true;
         }
         catch (err) {
-          this.subscriber.events.emit('error', err);
+          this.subscriber.events.emit('error', err as Error);
         }
       }
       this.loggerService.log('Connection established', PgNotifyServer.name);

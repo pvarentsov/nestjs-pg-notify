@@ -40,7 +40,7 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
     }
     catch (error) {
       this.firstConnected = false;
-      this.publisher.events.emit('error', error);
+      this.publisher.events.emit('error', error as Error);
     }
   }
 
@@ -56,7 +56,7 @@ export class PgNotifyClient extends ClientProxy implements OnApplicationBootstra
       await this.publisher.close();
     }
     catch (error) {
-      this.publisher.events.emit('error', error);
+      this.publisher.events.emit('error', error as Error);
     }
   }
 
