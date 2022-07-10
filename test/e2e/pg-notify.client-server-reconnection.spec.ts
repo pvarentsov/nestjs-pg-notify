@@ -82,7 +82,7 @@ async function createApp(serverLogger: LoggerService, clientLogger: LoggerServic
     strategy: new PgNotifyServer({...AppConfig.validOptions, logger: serverLogger}),
   });
 
-  await app.startAllMicroservicesAsync();
+  await app.startAllMicroservices();
   await app.init();
 
   return app;

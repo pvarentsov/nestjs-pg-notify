@@ -56,7 +56,7 @@ async function createApp(clientLogger: LoggerService): Promise<INestApplication>
     strategy: new PgNotifyServer(AppConfig.validOptions),
   });
 
-  await app.startAllMicroservicesAsync();
+  await app.startAllMicroservices();
   await app.init();
 
   return app;

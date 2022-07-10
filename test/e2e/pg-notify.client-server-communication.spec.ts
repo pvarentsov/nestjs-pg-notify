@@ -28,7 +28,7 @@ describe('E2E: Client-Server communication', () => {
       strategy: new PgNotifyServer(AppConfig.validOptions),
     });
 
-    await app.startAllMicroservicesAsync();
+    await app.startAllMicroservices();
     await app.init();
   });
 
