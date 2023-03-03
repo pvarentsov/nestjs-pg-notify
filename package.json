@@ -17,7 +17,7 @@
     "build": "tsc -p tsconfig.json",
     "build:release": "tsc -p tsconfig.release.json",
     "release": "npm run build:release && npm publish",
-    "typedoc": "typedoc src/index.ts && touch docs/.nojekyll",
+    "typedoc": "typedoc src/index.ts",
     "test": "jest --config jest.json --runInBand",
     "test:cov": "jest --config jest.json --runInBand --coverage",
     "lib:check": "ncu",
