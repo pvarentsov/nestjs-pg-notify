@@ -18,8 +18,8 @@ The [References](#References) section contains links that you may find useful to
 
 ## Custom transporter
 
-`NestJS PG Notify` implements Pub/Sub messaging paradigm using PostgreSQL as a [NestJS custom transporter](https://docs.nestjs.com/microservices/custom-transport). 
-It wraps the [pg-listen](https://github.com/andywer/pg-listen) library under the hood.
+**NestJS PG Notify** implements Pub/Sub messaging paradigm using PostgreSQL as a [NestJS custom transporter](https://docs.nestjs.com/microservices/custom-transport). 
+It wraps the [pg-listen](https://github.com/andywer/pg-listen) library under the hood. 
 
 It can be used in [microservice](https://docs.nestjs.com/microservices/basics) and [hybrid](https://docs.nestjs.com/faq/hybrid-application) 
 NestJS applications. The [example](./example) folder contains examples for both types of applications.
@@ -69,8 +69,13 @@ const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,
 
 ### Bind message handlers
 
-`NestJS PG Notify` offers two decorators to register message handlers: `@PgNotifyEventPattern()` and `@PgNotifyMessagePattern()`.
-These are an alternative to standard decorators: `@EventPattern()` and `@MessagePattern()`.
+**NestJS PG Notify** offers two decorators to register message handlers: 
+* `@PgNotifyEventPattern()`
+* `@PgNotifyMessagePattern()`
+ 
+These are an alternative to standard decorators: 
+* `@EventPattern()`
+* `@MessagePattern()`
 
 Message handler's binding can be used only within controller classes.
 
