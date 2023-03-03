@@ -14,11 +14,13 @@
 <a href="#nestjs-pg-notify" id="nestjs-pg-notify" style="color: inherit; text-decoration: none;">
   <h1>NestJS PG Notify</h1>
 </a>
+<blockquote>
 <p>NestJS custom transport strategy for PostgreSQL Pub/Sub.</p>
+</blockquote>
 <p><a href="./LICENSE"><img src="https://img.shields.io/github/license/pvarentsov/nestjs-pg-notify" alt="License: MIT"></a>
 <a href="https://www.npmjs.com/package/nestjs-pg-notify"><img src="https://img.shields.io/npm/v/nestjs-pg-notify.svg" alt="NPM Version"></a>
 <a href="https://www.npmjs.com/package/nestjs-pg-notify"><img src="https://img.shields.io/npm/dt/nestjs-pg-notify.svg" alt="NPM Downloads"></a>
-<a href="https://github.com/pvarentsov/nestjs-pg-notify/actions/workflows/release.yaml"><img src="https://img.shields.io/github/workflow/status/pvarentsov/nestjs-pg-notify/Release" alt="CI Status"></a>
+<a href="https://github.com/pvarentsov/nestjs-pg-notify/actions/workflows/npm-release.yaml"><img src="https://img.shields.io/github/actions/workflow/status/pvarentsov/nestjs-pg-notify/npm-release.yaml" alt="CI Status"></a>
 <a href="https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify"><img src="https://img.shields.io/sonar/quality_gate/pvarentsov_nestjs-pg-notify?server=https%3A%2F%2Fsonarcloud.io" alt="Quality Gate Status"></a>
 <a href="https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify"><img src="https://img.shields.io/sonar/coverage/pvarentsov_nestjs-pg-notify?server=https%3A%2F%2Fsonarcloud.io" alt="Coverage"></a></p>
 
@@ -32,8 +34,8 @@ Its functionality is similar to the Redis Pub/Sub, but has its own features and 
 <a href="#custom-transporter" id="custom-transporter" style="color: inherit; text-decoration: none;">
   <h2>Custom transporter</h2>
 </a>
-<p><code>NestJS PG Notify</code> implements Pub/Sub messaging paradigm using PostgreSQL as a <a href="https://docs.nestjs.com/microservices/custom-transport">NestJS custom transporter</a>. 
-It wraps the <a href="https://github.com/andywer/pg-listen">pg-listen</a> library under the hood.</p>
+<p><strong>NestJS PG Notify</strong> implements Pub/Sub messaging paradigm using PostgreSQL as a <a href="https://docs.nestjs.com/microservices/custom-transport">NestJS custom transporter</a>. 
+It wraps the <a href="https://github.com/andywer/pg-listen">pg-listen</a> library under the hood. </p>
 <p>It can be used in <a href="https://docs.nestjs.com/microservices/basics">microservice</a> and <a href="https://docs.nestjs.com/faq/hybrid-application">hybrid</a> 
 NestJS applications. The <a href="./example">example</a> folder contains examples for both types of applications.</p>
 
@@ -56,8 +58,16 @@ NestJS applications. The <a href="./example">example</a> folder contains example
 <a href="#bind-message-handlers" id="bind-message-handlers" style="color: inherit; text-decoration: none;">
   <h3>Bind message handlers</h3>
 </a>
-<p><code>NestJS PG Notify</code> offers two decorators to register message handlers: <code>@PgNotifyEventPattern()</code> and <code>@PgNotifyMessagePattern()</code>.
-These are an alternative to standard decorators: <code>@EventPattern()</code> and <code>@MessagePattern()</code>.</p>
+<p><strong>NestJS PG Notify</strong> offers two decorators to register message handlers: </p>
+<ul>
+<li><code>@PgNotifyEventPattern()</code></li>
+<li><code>@PgNotifyMessagePattern()</code></li>
+</ul>
+<p>These are an alternative to standard decorators: </p>
+<ul>
+<li><code>@EventPattern()</code></li>
+<li><code>@MessagePattern()</code></li>
+</ul>
 <p>Message handler&#39;s binding can be used only within controller classes.</p>
 <pre><code class="language-typescript"><span class="hl-1">import</span><span class="hl-0"> { </span><span class="hl-2">PgNotifyContext</span><span class="hl-0">, </span><span class="hl-2">PgNotifyEventPattern</span><span class="hl-0">, </span><span class="hl-2">PgNotifyMessagePattern</span><span class="hl-0"> } </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;nestjs-pg-notify&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-0">@</span><span class="hl-6">Controller</span><span class="hl-0">()</span><br/><span class="hl-1">export</span><span class="hl-0"> </span><span class="hl-4">class</span><span class="hl-0"> </span><span class="hl-7">AppController</span><span class="hl-0"> {</span><br/><br/><span class="hl-0">  @</span><span class="hl-6">PgNotifyEventPattern</span><span class="hl-0">({</span><span class="hl-2">event:</span><span class="hl-0"> </span><span class="hl-3">&#39;greeting&#39;</span><span class="hl-0">})</span><br/><span class="hl-0">  @</span><span class="hl-6">UsePipes</span><span class="hl-0">(</span><span class="hl-4">new</span><span class="hl-0"> </span><span class="hl-6">ValidationPipe</span><span class="hl-0">())</span><br/><span class="hl-0">  </span><span class="hl-6">onGreetingEvent</span><span class="hl-0">(@</span><span class="hl-6">Payload</span><span class="hl-0">() </span><span class="hl-2">payload</span><span class="hl-0">: </span><span class="hl-7">any</span><span class="hl-0">, @</span><span class="hl-6">Ctx</span><span class="hl-0">() </span><span class="hl-2">context</span><span class="hl-0">: </span><span class="hl-7">PgNotifyContext</span><span class="hl-0">): </span><span class="hl-7">void</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-2">Logger</span><span class="hl-0">.</span><span class="hl-6">log</span><span class="hl-0">(</span><span class="hl-2">payload</span><span class="hl-0">.</span><span class="hl-2">message</span><span class="hl-0">);</span><br/><span class="hl-0">  }</span><br/><br/><span class="hl-0">  @</span><span class="hl-6">PgNotifyMessagePattern</span><span class="hl-0">(</span><span class="hl-3">&#39;greeting&#39;</span><span class="hl-0">)</span><br/><span class="hl-0">  @</span><span class="hl-6">UsePipes</span><span class="hl-0">(</span><span class="hl-4">new</span><span class="hl-0"> </span><span class="hl-6">ValidationPipe</span><span class="hl-0">())</span><br/><span class="hl-0">  </span><span class="hl-6">onGreetingRequest</span><span class="hl-0">(@</span><span class="hl-6">Payload</span><span class="hl-0">() </span><span class="hl-2">payload</span><span class="hl-0">: </span><span class="hl-7">any</span><span class="hl-0">, @</span><span class="hl-6">Ctx</span><span class="hl-0">() </span><span class="hl-2">context</span><span class="hl-0">: </span><span class="hl-7">PgNotifyContext</span><span class="hl-0">): </span><span class="hl-7">string</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-2">Logger</span><span class="hl-0">.</span><span class="hl-6">log</span><span class="hl-0">(</span><span class="hl-2">payload</span><span class="hl-0">.</span><span class="hl-2">message</span><span class="hl-0">);</span><br/><span class="hl-0">    </span><span class="hl-1">return</span><span class="hl-0"> </span><span class="hl-3">&#39;Hello!&#39;</span><span class="hl-0">;</span><br/><span class="hl-0">  }</span><br/><br/><span class="hl-0">}</span>
 </code></pre>
