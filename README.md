@@ -1,6 +1,6 @@
 # NestJS PG Notify
 
-NestJS custom transport strategy for PostgreSQL Pub/Sub.
+> NestJS custom transport strategy for PostgreSQL Pub/Sub.
 
 [![License: MIT](https://img.shields.io/github/license/pvarentsov/nestjs-pg-notify)](./LICENSE)
 [![NPM Version](https://img.shields.io/npm/v/nestjs-pg-notify.svg)](https://www.npmjs.com/package/nestjs-pg-notify)
