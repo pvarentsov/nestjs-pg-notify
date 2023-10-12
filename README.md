@@ -5,9 +5,9 @@
 [![License: MIT](https://img.shields.io/github/license/pvarentsov/nestjs-pg-notify)](./LICENSE)
 [![NPM Version](https://img.shields.io/npm/v/nestjs-pg-notify.svg)](https://www.npmjs.com/package/nestjs-pg-notify)
 [![NPM Downloads](https://img.shields.io/npm/dt/nestjs-pg-notify.svg)](https://www.npmjs.com/package/nestjs-pg-notify)
-[![CI Status](https://img.shields.io/github/actions/workflow/status/pvarentsov/nestjs-pg-notify/npm-release.yaml)](https://github.com/pvarentsov/nestjs-pg-notify/actions/workflows/npm-release.yaml)
+<!-- [![CI Status](https://img.shields.io/github/actions/workflow/status/pvarentsov/nestjs-pg-notify/npm-release.yaml)](https://github.com/pvarentsov/nestjs-pg-notify/actions/workflows/npm-release.yaml)
 [![Quality Gate Status](https://img.shields.io/sonar/quality_gate/pvarentsov_nestjs-pg-notify?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify)
-[![Coverage](https://img.shields.io/sonar/coverage/pvarentsov_nestjs-pg-notify?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify)
+[![Coverage](https://img.shields.io/sonar/coverage/pvarentsov_nestjs-pg-notify?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/dashboard?id=pvarentsov_nestjs-pg-notify) -->
 
 ## PostgreSQL async notifications
 
